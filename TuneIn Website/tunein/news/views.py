@@ -20,3 +20,6 @@ def add(request):
 
 def feed(request):
     return render(request, 'news.html')
+
+def loginIndex(request):
+    return render(request, 'loginpage/index.html')
