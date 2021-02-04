@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 {% load static %}
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
-<head>
-    <title>asdf |Tune In</title>
-</head>
-<body>
-    <div class="header">
-        <ul>
-            <li class="title">Tune In</li>
-            <li>
-                <div class="search">
-                    <form action="{% url 'index' %}">
-                        <input type="submit" value ="🔎">
-                        <input type="text" id="usernameField" name="username" placeholder="{{user.username}}">
-                    </form>
-                </div>
-            </li>
-            <!-- replace these with the proper links-->
-            
-            <li><a href="{% url 'home' %}">🏠Home</a></li>
-            <li><a href="{% url 'feed' %}">🎶Feed</a></li>
-            <li><a href="google.com">⚙settings</a></li>
-            <li><a href="{% url 'login' %}">🚪Log out</a></li>
-        </ul>
-    </div>
+    {% block content %}
     <br>
+    <link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
     <div class="gridLayout">
         <div class="leftBorder"></div>
         <div class="middle">
@@ -191,5 +166,4 @@
         </div>
         <div class="foot">This page is still a work in progress</div>
     </div>
-</body>
-</html>
+    {% endblock %}
