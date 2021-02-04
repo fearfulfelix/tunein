@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+    body{
+    margin:0;
+    background-color: #222132;
+    color:white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.posts{
+    align-content: center;
+    position: relative;
+    width:80%;
+    height:auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+.post{
+    margin-top:5%;
+    margin-bottom: 5%;;
+    text-align: center;
+    background-color: #333656;
+    display: flex;
+    flex-wrap: nowrap;
+    border-radius: 25px;
+    box-shadow: 5px 5px 5px #1A1B2F;
+    flex-direction: column;
+}
+.post_header{
+    margin-top:2%;
+    margin-left:2%;
+    flex: 0 3 50px;
+    width: 100%;
+    text-align: left;
+}
+
+.post_icon{
+    display:inline;
+    height:50px;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+    border-radius: 100%;
+}
+.post_username{
+    text-decoration:none;
+    color: white;
+    font-weight: bold;
+}
+.date{
+    font-weight: lighter;
+}
+.post_content{
+    flex: 0 3 100px;
+    margin:2%;
+    margin-bottom:0%;
+    border-radius: 25px;
+    background-color: #89899E;
+}
+.post_text{
+    margin:2%;
+    margin-top: 0%;
+    text-align: left;
+    font-size: 14px;
+}
+.post_interactables{
+    display: flex;
+    justify-content:space-evenly;
+    margin:2%;
+}
+
+
+
+
+</style>
+
+
+<div class="posts">
+
+    <div class="post">
+        <div class="post_header">
+
+            <a class="post_username" href="{% url 'home' %}">{{user.username}}</a>
+            <p id="date"></p>
+        </div>
+
+        <div class="post_content">
+            content goes here :p
+            <br>
+            Im not required!
+        </div>
+        <div class="post_text">
+            <p><span class="post_username">{{user.username}}:</span> Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit. Aenean ut arcu a mauris aliquet feugiat at a orci. Donec vitae tellus et ex consequat fringilla
+                quis ut elit. Praesent consequat dolor ac dolor fringilla egestas. Phasellus et finibus ex. Duis id
+                turpis sit amet eros pharetra eleifend ut ut risus. Sed velit lectus, interdum a rutrum non, varius nec
+                nisi. Proin dictum ante eget ultricies fermentum. Sed at hendrerit dolor. Duis mattis dui purus, nec
+                dignissim turpis venenatis vel. Sed vel tortor purus.</p>
+        </div>
+        <div class="post_interactables">
+            <div>❤Like</div>
+            <div>💬Comment</div>
+            <div>📩Share</div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    n =  new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("date").innerHTML = m + "/" + d + "/" + y;
+
+    function multiplyNode(node, count, deep) {
+    for (var i = 0, copy; i < count - 1; i++) {
+        copy = node.cloneNode(deep);
+        node.parentNode.insertBefore(copy, node);
+        }
+    }
+
+    multiplyNode(document.querySelector('.post'), 3, true);
+
+
+
+
+</script>
+
+{% endblock %}
