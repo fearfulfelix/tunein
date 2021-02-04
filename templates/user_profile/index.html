@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
+<head>
+    <title>asdf |Tune In</title>
+</head>
+<body>
+    <div class="header">
+        <ul>
+            <li class="title">Tune In</li>
+            <li>
+                <div class="search">
+                    <form action="{% url 'index' %}">
+                        <input type="submit" value ="🔎">
+                        <input type="text" id="usernameField" name="username" placeholder="{{user.username}}">
+                    </form>
+                </div>
+            </li>
+            <!-- replace these with the proper links-->
+            
+            <li><a href="google.com">🏠Home</a></li>
+            <li><a href="google.com">⚙settings</a></li>
+            <li><a href="google.com">🚪Log out</a></li>
+        </ul>
+    </div>
+    <br>
+    <div class="gridLayout">
+        <div class="leftBorder"></div>
+        <div class="middle">
+            <div class="topInfo">
+                {% if user %}
+                <div class="c_icon"><img class ="icon" src="{% static user.photo %}"></div>
+                <div class="names">
+                    <h1 id="name">{{user.first_name}} {{user.last_name}}</h1>
+                    <h2 id="username">{{user.username}}</h2><span class="account_type">{{user.account_type}}</span>
+                    <h3>following:<span id="following"> NAN </span> 
+                        {% if user.account_type == "ARTIST" %}
+                        • followers: <span id="followers"> NAN </span></h3>
+                        {%endif%}
+                        
+                        
+                        <script type="text/javascript" >
+                            if("{{user.account_type}}" =="ARTIST"){
+                                var a = parseInt("{{user.followers}}");
+                                console.log(a);
+                                if(a < 1000){
+                                    document.getElementById("followers").innerHTML =a;
+                                } else if(a > 1000 && a < 1000000){
+                                    document.getElementById("followers").innerHTML = (a/1000).toPrecision(2) + "K";
+                                } else if(a> 1000000){
+                                    document.getElementById("followers").innerText = (a/1000000).toPrecision(2) + "M";
+                                }
+                            }
+                            var a = parseInt("{{user.following}}");
+                            console.log(a);
+                            if(a < 1000){
+                                document.getElementById("following").innerHTML =a;
+                            } else if(a > 1000 && a < 1000000){
+                                document.getElementById("following").innerHTML = (a/1000).toPrecision(2) + "K";
+                            } else if(a> 1000000){
+                                document.getElementById("following").innerText = (a/1000000).toPrecision(2) + "M";
+                            }
+                        </script>
+                        
+                    </div>
+                    <br>
+                    <div class="bio">
+                        Bio:
+                        <p id="bio">{{user.bio}}</p>
+                    </div>
+                    {% else %}
+                    User not found? 
+                    Make sure the username in the url matches who you're looking for!
+                    {% endif %}
+                </div>
+                <br>
+                <br>
+                <div class="posts">
+                    {% if user %}
+                    {% if user.account_type == "ARTIST" %}
+
+                    {% for post in user.posts %}
+                    <div class ="post">
+                        <div class= "post_header">
+                           <img class ="post_icon" src="{% static user.photo %}"> 
+                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
+                           <span class="date">Date goes here</span>
+                        </div>
+                    
+                        <div class = "post_content">
+                            content goes here :p
+                            <br>
+                            Im not required!
+                        </div>
+                        <div class="post_text">
+                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
+                                But I'd be too busy on working days
+                                So I am relieved that the turbulence wasn't forecasted
+                                I couldn't have changed anyways</p>
+                        </div>
+                        <div class= "post_interactables">
+                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
+                        </div>
+                    </div>
+
+                    {% empty %}
+                    
+                    <div class ="post">
+                        <div class= "post_header">
+                           <img class ="post_icon" src="{% static user.photo %}"> 
+                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
+                           <span class="date">Date goes here</span>
+                        </div>
+                    
+                        <div class = "post_content">
+                            content goes here :p
+                            <br>
+                            Im not required!
+                        </div>
+                        <div class="post_text">
+                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
+                                But I'd be too busy on working days
+                                So I am relieved that the turbulence wasn't forecasted
+                                I couldn't have changed anyways</p>
+                        </div>
+                        <div class= "post_interactables">
+                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
+                        </div>
+                    </div>
+                    <div class ="post">
+                        <div class= "post_header">
+                           <img class ="post_icon" src="{% static user.photo %}"> 
+                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
+                           <span class="date">Date goes here</span>
+                        </div>
+                    
+                        <div class = "post_content">
+                            content goes here :p
+                            <br>
+                            Im not required!
+                        </div>
+                        <div class="post_text">
+                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
+                                But I'd be too busy on working days
+                                So I am relieved that the turbulence wasn't forecasted
+                                I couldn't have changed anyways</p>
+                        </div>
+                        <div class= "post_interactables">
+                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
+                        </div>
+                    </div>
+                    <div class ="post">
+                        <div class= "post_header">
+                           <img class ="post_icon" src="{% static user.photo %}"> 
+                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
+                           <span class="date">Date goes here</span>
+                        </div>
+                    
+                        <div class = "post_content">
+                            content goes here :p
+                            <br>
+                            Im not required!
+                        </div>
+                        <div class="post_text">
+                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
+                                But I'd be too busy on working days
+                                So I am relieved that the turbulence wasn't forecasted
+                                I couldn't have changed anyways</p>
+                        </div>
+                        <div class= "post_interactables">
+                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
+                        </div>
+                    </div>
+                    
+                    {% endfor %}
+                    
+                    {% else %}
+                    this account cannot make posts since its a fan account, this message is just temporary.
+                    {% endif %}
+                    {% else %}
+                    if a user existed, their posts would be here!
+                    {% endif %}
+                </div>
+            </div>
+            <div class="rightBorder"></div>
+            
+        </div>
+        <div class="foot">This page is still a work in progress</div>
+    </div>
+</body>
+</html>
