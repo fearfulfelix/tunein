@@ -69,14 +69,14 @@
 <body>
 <div class="header">
     <ul>
-        <li><a href="home"><div class="logo"><img src="{% static 'tuneinLogo.png' %}" alt="TuneIn" width="28" height="28"/></div></a></li>
+        <li><a href="{% url 'feed' %}"><div class="logo"><img src="{% static 'tuneinLogo.png' %}" alt="TuneIn" width="28" height="28"/></div></a></li>
         <!-- <li class="title">Tune In</li> -->
         <!-- li>Username goes here</li> -->
 
         <li>
             <div class="search">
 
-                <form action="home">
+                <form action="{% url 'user_profile' %}">
                     <input type="submit" value="🔎">
                     <input type="text" id="usernameField" name="username" placeholder="{{user.username}}">
                 </form>
