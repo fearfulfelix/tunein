@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/loginBase.css' %}">
+    <meta charset="UTF-8">
+    <title>TuneIn: {% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <div class = "header">
+        <div class="title">Tune In</div>
+    </div>        
+    <div class = "gridLayout">
+        <div class ="leftBorder"></div>
+        <div class="middle">
+            <div>
+                <img class="img-fluid" src="{% static 'img/Asset_1.png' %}" alt="photo">
+            </div>
+            <div>    
+                {% block content %}{% endblock %}
+            </div>
+            <div class="homeText"><h1>Tune In</h1></div>
+            <div class="homeText"><h2>Where the passion for creation and discovery of music come together.</h2></div>
+        </div>
+        <div class="rightBorder"></div>
+    </div>
+    <div class="foot">Contact Us</div>
+</body>
+
+</html>

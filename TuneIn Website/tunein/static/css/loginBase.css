@@ -1,0 +1,150 @@
+/* header & related elements */
+.header{
+    padding:1%;
+    border-radius: 0px 0px 25px 25px;
+    text-align:center;
+    background-color:#E08500;
+}
+
+.title{
+    padding-left: 0%;
+    padding-right: 2.5%;
+    float: center;
+}
+
+.search{
+    float: left;
+}
+
+.search input{
+    border-radius: 25px;
+    border-width: 0;
+}
+
+.header a{
+    text-decoration: none;
+    color: white;
+}
+
+/*fix this if you need more list related elements, otherwise its chill*/
+ul {
+    color:white;
+    text-align: right;
+    list-style-type: none;
+    margin: 0;
+  }
+li {
+    padding-left: 5%;
+    display: inline;
+  }
+
+/* main body & related elements */
+body{
+    margin:0;
+    background-color: #222132;
+    color:white;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.gridLayout{
+    margin-top: 5%;
+    display: flex;
+    flex-wrap: nowrap;    
+}
+.leftBorder{
+    flex: 0 3 300px;
+}
+.middle{
+    flex: 3 1 150px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto; 
+}
+.middle > div {
+    width: 410px;
+}
+.rightBorder{
+    flex: 0 3 300px;
+}
+.foot{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+.homeText {
+    text-align: center;
+}
+input[type=text], input[type=password] {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+input[type=submit] {
+    width: 40%;
+    background-color: #E08500;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+input[type=submit]:hover {
+    background-color: #c57600;
+  }
+
+img {
+    max-width: 90%;
+    height: auto;
+}  
+/* profile info & related elements */
+.topInfo{
+    background-color: #333656;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items:center;
+    border-radius: 25px;
+    box-shadow: 5px 5px 5px #1A1B2F;
+}
+.c_icon{
+    flex: 0 1 150px;
+    margin: 5px;
+    height: 200px;
+    width: 200px;
+}
+.icon{
+    width:inherit;
+    align-content: center;
+    border-radius: 100%;
+    position:relative;
+    display:inline-block
+}
+
+.name{
+    flex: 0 1 150px;
+    margin: 5px;
+    position:relative;
+    display:inline-block
+}
+
+.bio{
+    margin-left: 15%;
+    margin-right:15%;
+}  
+
+.account_type{
+    color:#E08500;
+}
+
+/* posts & related elements */
+.posts{
+    text-align: center;
+}
