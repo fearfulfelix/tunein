@@ -10,7 +10,7 @@
 <body>
 {% block content %}
     <h1>Hello!</h1>
-    <form action="">
+    <form action="{% url 'feed' %}">
         Username: <input type="text" id= "uid" name="userID" placeholder="Enter your username or email address..."><br><br>
         Password: <input type="password" id = "upw" name="userPW" placeholder="Enter your password..."><br><br>
         <input type="submit" value="Submit">
