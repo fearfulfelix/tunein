@@ -8,5 +8,6 @@ urlpatterns = [
     path('home', views.home, name='home'),
     path('feed', views.feed, name="feed"),
     path('processing', views.processLogin, name='ignoreMe'),
-    path('logOut',views.processLogout, name='logout')
+    path('logOut',views.processLogout, name='logout'),
+    path('settings', views.settings, name="settings"),
 ]
