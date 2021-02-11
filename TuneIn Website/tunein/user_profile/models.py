@@ -7,6 +7,7 @@ from django.dispatch import receiver
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    User._meta.get_field('email')._unique = True
     ARTIST = 'ARTIST'
     FAN = 'FAN'
     account_type_choices = ((ARTIST,"ARTIST"),

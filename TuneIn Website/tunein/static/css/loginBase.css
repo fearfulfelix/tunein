@@ -75,7 +75,7 @@ body{
 .homeText {
     text-align: center;
 }
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=email] {
     width: 70%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -85,7 +85,7 @@ input[type=text], input[type=password] {
     box-sizing: border-box;
   }
   
-input[type=submit] {
+input[type=submit],input[type=button] {
     width: 40%;
     background-color: #E08500;
     color: white;

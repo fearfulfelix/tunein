@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from user_profile.forms import loginForm
+from user_profile.forms import loginForm, registrationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
-
-
+from user_profile.models import User
 # Create your views here.
 
 
@@ -22,7 +21,10 @@ def add(request):
 
 
 def feed(request):
-    return render(request, 'news.html')
+    if request.user.is_authenticated:# checks if user is logged in, redirects to login if false
+        return render(request, 'news.html')
+    else:
+        return HttpResponseRedirect('/') 
 
 def settings(request):
     return render(request, 'settings.html')
@@ -50,6 +52,30 @@ def processLogin(request):
             print("form error")
             return HttpResponseRedirect('/')
 
+def processRegistration(request):
+    if request.method == 'POST':
+        print("post")
+        form = registrationForm(request.POST)
+        print(form)
+        if form.is_valid:
+            print("valid")
+            credentials = form.cleaned_data
+            username = credentials['username']
+            email = credentials['email']
+            created = User.objects.filter(email=email,username=username)
+            print(created)
+            if created:
+                print("user already exists")
+                return HttpResponseRedirect('/')
+            else:
+                user = User.objects.create_user(username=credentials['username'],
+                email=credentials['email'],
+                password=credentials['password'])
+                print(user)
+                login(request,user)
+                print("send user to profile creation page")
+                return HttpResponseRedirect('feed')
+    return None            
 
 def processLogout(request):
     print("logging user out")
@@ -60,4 +86,5 @@ def processLogout(request):
 
 def loginIndex(request):
     form = loginForm()
-    return render(request, 'loginpage/index.html', {'LoginForm': form})
+    rform = registrationForm()
+    return render(request, 'loginpage/index.html', {'LoginForm': form,'RegistrationForm': rform})
