@@ -10,17 +10,17 @@
                 {% if user %}
                 <div class="c_icon"><img class ="icon" src="{% static user.photo %}"></div>
                 <div class="names">
-                    <h1 id="name">{{user.first_name}} {{user.last_name}}</h1>
-                    <h2 id="username">{{user.username}}</h2><span class="account_type">{{user.account_type}}</span>
+                    <h1 id="name">{{user.profile.first_name}} {{user.profile.last_name}}</h1>
+                    <h2 id="username">{{user.username}}</h2><span class="account_type">{{user.profile.account_type}}</span>
                     <h3>following:<span id="following"> NAN </span> 
-                        {% if user.account_type == "ARTIST" %}
+                        {% if user.profile.account_type == "ARTIST" %}
                         • followers: <span id="followers"> NAN </span></h3>
                         {%endif%}
                         
                         
                         <script type="text/javascript" >
-                            if("{{user.account_type}}" =="ARTIST"){
-                                var a = parseInt("{{user.followers}}");
+                            if("{{user.profile.account_type}}" =="ARTIST"){
+                                var a = parseInt("{{user.profile.followers}}");
                                 console.log(a);
                                 if(a < 1000){
                                     document.getElementById("followers").innerHTML =a;
@@ -30,7 +30,7 @@
                                     document.getElementById("followers").innerText = (a/1000000).toPrecision(2) + "M";
                                 }
                             }
-                            var a = parseInt("{{user.following}}");
+                            var a = parseInt("{{user.profile.following}}");
                             console.log(a);
                             if(a < 1000){
                                 document.getElementById("following").innerHTML =a;
@@ -45,7 +45,7 @@
                     <br>
                     <div class="bio">
                         Bio:
-                        <p id="bio">{{user.bio}}</p>
+                        <p id="bio">{{user.profile.bio}}</p>
                     </div>
                     {% else %}
                     User not found? 
@@ -55,10 +55,11 @@
                 <br>
                 <br>
                 <div class="posts">
-                    {% if user %}
-                    {% if user.account_type == "ARTIST" %}
+                    <!-- reversed because posts dont exist yet-->
+                    {% if not user %}
+                    {% if user.profile.account_type == "ARTIST" %}
 
-                    {% for post in user.posts %}
+                    {% for post in user.profile.posts %}
                     <div class ="post">
                         <div class= "post_header">
                            <img class ="post_icon" src="{% static user.photo %}"> 

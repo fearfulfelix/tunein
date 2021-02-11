@@ -10,14 +10,21 @@
 <body>
 {% block content %}
     <h1>Hello!</h1>
-    <form action="{% url 'feed' %}">
-        Username: <input type="text" id= "uid" name="userID" placeholder="Enter your username or email address..."><br><br>
-        Password: <input type="password" id = "upw" name="userPW" placeholder="Enter your password..."><br><br>
+    <form action = "{% url 'ignoreMe' %}" method="post">
+        {% csrf_token %}
+        {{ LoginForm.as_p }}
+        
         <input type="submit" value="Submit">
     </form>
+
     <form action="">
         <input type="submit" value="New User">
     </form> 
 {% endblock %}
 </body>
 </html>
+
+<!--messing with things, dont delete this just in case I messed things up - felix
+        Username: <input type="text" id= "uid" name="userID" placeholder="Enter your username or email address..."><br><br>
+        Password: <input type="password" id = "upw" name="userPW" placeholder="Enter your password..."><br><br>
+        -->

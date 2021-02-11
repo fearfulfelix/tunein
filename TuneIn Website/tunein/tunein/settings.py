@@ -126,3 +126,6 @@ STATICFILES_DIRS = [
     '/var/www/static/',
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
+
+
+LOGIN_REDIRECT_URL = 'user_profile/'

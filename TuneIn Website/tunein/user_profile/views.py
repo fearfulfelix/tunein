@@ -1,20 +1,17 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import *
+from .models import User
 # Create your views here.
 
 def index(request):
-    #delete this chunk before sharing
-    #sample_user = user(username = "burnt_parmesan", first_name = "Felix", last_name = "Turgeon")
-    #sample_user.save()
-    #end
 
     con = {}
     try:
-        sample_user = user.objects.get(username= request.GET.get('username'))
+        sample_user = User.objects.get(username= request.GET.get('username'))
         con = {'user': sample_user}
-    except user.DoesNotExist:
+        #ignore this issue, its visual studio, not me
+    except User.DoesNotExist:
         print("UNF")
 
     template = loader.get_template('user_profile/index.html')
