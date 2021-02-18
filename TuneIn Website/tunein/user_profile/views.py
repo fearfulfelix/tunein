@@ -9,7 +9,9 @@ def index(request):
     con = {}
     try:
         sample_user = User.objects.get(username= request.GET.get('username'))
-        con = {'user': sample_user}
+        artist = sample_user.groups.filter(name='artists').exists()
+        con = {'user': sample_user,
+        'artist': artist}
         #ignore this issue, its visual studio, not me
     except User.DoesNotExist:
         print("UNF")
