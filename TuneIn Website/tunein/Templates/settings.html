@@ -71,7 +71,7 @@
         <hr>
         <form action="{% url 'processSettings' %}", method="post">
             {% csrf_token %}
-            {{bioForm}}
+            {{bioForm.as_p}}
             <input type="submit" name='formType'value="Update Bio">
         </form>
         <!--Username <pre>TuneIn.com/HeroOfTime</pre> <a href><span class="edit">Edit</span></a>-->
