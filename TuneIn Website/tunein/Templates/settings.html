@@ -4,50 +4,85 @@
 <link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
 <style>
     .post_text{
-    margin-top:3%;
-    column-count: 3;
-    height: 40px;
-    column-fill: balance;
-    border-bottom: 1px solid #cccccc;
+        margin-top:3%;
+        column-count: 3;
+        height: 40px;
+        column-fill: balance;
+        border-bottom: 1px solid #cccccc;
     }
     .posts{
-    align-content: center;
-    position: relative;
-    width:50%;
-    height:auto;
-    margin-left: auto;
-    margin-right: auto;
-}
+        align-content: center;
+        position: relative;
+        width:50%;
+        height:auto;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .edit{
+        float: right;
+    }
+    
+    a:link, a:visited {
+        color: white;
+        background-color: transparent;
+        text-decoration: none;
+    }
+    .posts input[type=text], input[type=password], input[type=email] {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+.posts input[type=submit],input[type=button] {
+    width: 40%;
+    background-color: #E08500;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+.posts input[type=submit]:hover {
+    background-color: #c57600;
+  }
 
-.edit{
-float: right;
-}
-
-a:link, a:visited {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-}
-
-
+    
 </style>
 <!-- HTML Layout for posts on the news page -->
 <div class="posts">
-
+    
     <div class="post">
-
-        <div class="post_text">
-            Name  <pre>Alex O'Hare</pre> <a href><span class="edit">Edit</span></a>
-        </div>
-        <div class="post_text">
-            Username <pre>TuneIn.com/HeroOfTime</pre> <a href><span class="edit">Edit</span></a>
-        </div>
-        <div class="post_text">
+        
+        
+        <form action="{% url 'processSettings' %}", method="post">
+            {% csrf_token %}
+            {{nameForm.as_p}}
+            <input type="submit"name='formType' value="Update Name">
+        </form>
+        <!--Name  <pre>Alex O'Hare</pre> <a href><span class="edit">Edit</span></a>-->
+        
+        <hr>
+        <form action="{% url 'processSettings' %}", method="post">
+            {% csrf_token %}
+            {{bioForm}}
+            <input type="submit" name='formType'value="Update Bio">
+        </form>
+        <!--Username <pre>TuneIn.com/HeroOfTime</pre> <a href><span class="edit">Edit</span></a>-->
+        
+        <!--<div class="post_text">
             Email <pre>alexohare@canadore.ca</pre> <a href><span class="edit">Edit</span></a>
         </div>
         <div class="post_text">
             Location <pre>North Bay, ON</pre> <a href><span class="edit">Edit</span></a>
         </div>
-    </div>
+    -->
+</div>
 </div>
 {% endblock %}

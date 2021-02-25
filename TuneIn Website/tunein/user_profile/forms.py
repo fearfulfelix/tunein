@@ -17,3 +17,13 @@ class profileForm(forms.Form):
     first_name = forms.CharField(label = 'First Name:')
     last_name = forms.CharField(label = 'Last Name:')
     bio = forms.CharField(label = 'bio:', widget=forms.Textarea)
+
+#these are individual forms for the settings page
+
+class nameForm(forms.Form):
+    first_name = forms.CharField(label = 'First Name:')
+    last_name = forms.CharField(label = 'Last Name:')
+
+class bioForm(forms.Form):
+    bio = forms.CharField(label = 'bio:', widget=forms.Textarea)
+    

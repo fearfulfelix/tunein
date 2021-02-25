@@ -3,10 +3,38 @@
 
 <!-- this needs a lot of work done to make it look good!!-->
 {% block content %}
+<style>
+   .content input[type=text], input[type=password], input[type=email] {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+.content input[type=submit],input[type=button] {
+    width: 40%;
+    background-color: #E08500;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .content input[type=submit]:hover {
+    background-color: #c57600;
+  }
+
+</style>
+<div class ="content">
         <form action="{% url 'processPost' %}", method="post">
             {% csrf_token %}
             {{postForm.as_p}}
             <input type="submit" value="Submit">
         </form>
-
+    </div>
 {% endblock %}

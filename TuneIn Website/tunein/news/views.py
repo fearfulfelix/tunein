@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from user_profile.forms import loginForm, registrationForm, profileForm
+from user_profile.forms import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from user_profile.models import User
@@ -33,10 +33,32 @@ def feed(request):
 #settings page, needs to be functional
 def settings(request):
     if request.user.is_authenticated:
-        return render(request,'settings.html')
+        name= nameForm()
+        bio = bioForm()
+        return render(request,'settings.html',{"nameForm":name, "bioForm":bio})
     else:
         return HttpResponseRedirect('/')
     
+def processSettings(request):
+    if request.user.is_authenticated:
+        if request.POST['formType'] == 'update Bio':
+            form = bioForm(request.POST)
+            if(form.is_valid()):
+                newBio = form.cleaned_data['bio']
+                request.user.profile.bio = newBio
+                request.user.profile.save()
+        else:
+            form = nameForm(request.POST)
+            if(form.is_valid()):
+                newFirst = form.cleaned_data['first_name']
+                newLast = form.cleaned_data['last_name']
+                if newFirst != "" and newLast != "":
+                    request.user.profile.first_name = newFirst
+                    request.user.profile.last_name = newLast
+                    request.user.profile.save()
+
+                
+    return HttpResponseRedirect('settings')
 
 #processes the login form from the login page.
 #   uses the built in django authentication system to validate the provided user information

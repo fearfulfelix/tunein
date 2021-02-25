@@ -14,5 +14,6 @@ urlpatterns = [
     path('createPost', views.createPost, name='createPost'),
     path('processPost',views.processPost, name="processPost"),
     path('createProfile',views.createProfile, name='createProfile'),
-    path('processProfile',views.processProfile,name ='processProfile')
+    path('processProfile',views.processProfile,name ='processProfile'),
+    path('processSettings',views.processSettings, name='processSettings')
 ]
