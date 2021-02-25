@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+<!-- this needs a lot of work done to make it look good!!-->
+{% block content %}
+        <form action="{% url 'processProfile' %}", method="post">
+            {% csrf_token %}
+            {{profileForm.as_p}}
+            <input type="submit" value="Submit">
+        </form>
+
+{% endblock %}

@@ -10,6 +10,7 @@ from datetime import datetime
 #it has all the extra fields that arent in user
 #it also modifies the user model to ensure email addresses are unique to avoid complications
 class Profile(models.Model):
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     User._meta.get_field('email')._unique = True
     first_name = models.CharField(max_length=20,default="")

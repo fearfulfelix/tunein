@@ -11,7 +11,7 @@
 {% block content %}
     <h1>Hello!</h1>
     <div id="loginFields">
-    <form action = "{% url 'ignoreMe' %}" method="post">
+    <form action = "{% url 'processLogin' %}" method="post">
         {% csrf_token %}
         {{ LoginForm.as_p }}
         

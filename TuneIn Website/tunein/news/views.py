@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from user_profile.forms import loginForm, registrationForm
+from user_profile.forms import loginForm, registrationForm, profileForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from user_profile.models import User
@@ -40,7 +40,8 @@ def settings(request):
 
 #processes the login form from the login page.
 #   uses the built in django authentication system to validate the provided user information
-#   needs to provide error information to users upon failed registration
+#   needs to provide error information to users upon failed login
+#   sends user to the feed, UNLESS they haven't created a profile, in that case they go to createProfile
 def processLogin(request):
     if request.method == 'POST':
         print("post")
@@ -55,7 +56,10 @@ def processLogin(request):
             if user is not None:
                 print("not none")
                 login(request, user)
-                return HttpResponseRedirect('feed')
+                if user.profile.first_name == "":
+                    return HttpResponseRedirect('createProfile')
+                else:
+                    return HttpResponseRedirect('feed')
             else:
                 print("user does not exist")
                 return HttpResponseRedirect('/')
@@ -66,7 +70,7 @@ def processLogin(request):
 #processes the user registration form from the login page
 #   simmilar to processlogin, where it uses the built in authentication system to validate users
 #   needs to provide error information to users upon failed registration
-#   this should send people to a profile creation page, please
+#   this now sends users to the profile creation page
 def processRegistration(request):
     if request.method == 'POST':
         print("post")
@@ -89,15 +93,33 @@ def processRegistration(request):
                 print(user)
                 login(request,user)
                 print("send user to profile creation page")
-                return HttpResponseRedirect('feed')
+                return HttpResponseRedirect('createProfile')
     return None            
 
-#creates a profile to match the newly created user
-#only come here after processing a new account!!! 
+#creates a profile to match the newly created user 
 def createProfile(request):
-    
-    return render(request,'createProfile.html')
-    
+    if request.user.is_authenticated and request.user.profile.first_name == "":
+        profile = profileForm()
+        return render(request,'createProfile.html',{'profileForm':profile})
+    else:
+        return HttpResponseRedirect('processProfile')
+
+#processes the form retrieved from createProfile
+#   Updates the user.profile model currently logged in    
+def processProfile(request):
+    if request.user.is_authenticated and request.user.profile.first_name == "":
+        if request.method== 'POST':
+            p = profileForm(request.POST)
+            if p.is_valid():
+                cleanProfile = p.cleaned_data
+                first = cleanProfile['first_name']
+                last = cleanProfile['last_name']
+                bio = cleanProfile['bio']
+                request.user.profile.first_name = first
+                request.user.profile.last_name = last
+                request.user.profile.bio = bio
+                request.user.profile.save()
+    return HttpResponseRedirect('feed')
 
 #logs the user out, and sends them to the login page
 def processLogout(request):
