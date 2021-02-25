@@ -12,7 +12,7 @@ def index(request):
         artist = sample_user.groups.filter(name='artists').exists()
         con = {'user': sample_user,
         'artist': artist}
-        #ignore this issue, its visual studio, not me
+        
     except User.DoesNotExist:
         print("UNF")
 

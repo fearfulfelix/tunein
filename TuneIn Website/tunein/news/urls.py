@@ -7,8 +7,10 @@ urlpatterns = [
     path('add', views.add, name='add'),
     path('home', views.home, name='home'),
     path('feed', views.feed, name="feed"),
-    path('processing', views.processLogin, name='ignoreMe'),
+    path('processing', views.processLogin, name='processLogin'),
     path('settings', views.settings, name="settings"),
     path('logOut',views.processLogout, name='logout'),
-    path('register', views.processRegistration, name='register')
+    path('register', views.processRegistration, name='register'),
+    path('createPost', views.createPost, name='createPost'),
+    path('processPost',views.processPost, name="processPost")
 ]
