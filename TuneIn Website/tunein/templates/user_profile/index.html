@@ -8,14 +8,14 @@
         <div class="middle">
             <div class="topInfo">
                 {% if user %}
-                <div class="c_icon"><img class ="icon" src="{% static user.photo %}"></div>
+                <div class="c_icon"><img class ="icon" src="{{user.profile.photo.url }}"></div>
                 <div class="names">
                     <h1 id="name">{{user.profile.first_name}} {{user.profile.last_name}}</h1>
                     <h2 id="username">{{user.username}}</h2><span class="account_type">{% if artist%}artist{%else%}fan{%endif%}</span>
                     <h3>following:<span id="following"> NAN </span> 
                         {% if artist %}
                         • followers: <span id="followers"> NAN </span></h3>
-                        {%endif%}
+                        {% endif %}
                         
                         
                         <script type="text/javascript" >
@@ -56,109 +56,29 @@
                 <br>
                 <div class="posts">
                     <!-- reversed because posts dont exist yet removing the not will break the page-->
-                    {% if not user %}
-                    {% if artist %}
-                        
-                    {% for post in user.profile.posts %}
-                    <div class ="post">
-                        <div class= "post_header">
-                           <img class ="post_icon" src="{% static user.photo %}"> 
-                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
-                           <span class="date">Date goes here</span>
-                        </div>
-                    
-                        <div class = "post_content">
-                            content goes here :p
-                            <br>
-                            Im not required!
-                        </div>
-                        <div class="post_text">
-                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
-                                But I'd be too busy on working days
-                                So I am relieved that the turbulence wasn't forecasted
-                                I couldn't have changed anyways</p>
-                        </div>
-                        <div class= "post_interactables">
-                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
-                        </div>
-                    </div>
-
-                    {% empty %}
-                    
-                    <div class ="post">
-                        <div class= "post_header">
-                           <img class ="post_icon" src="{% static user.photo %}"> 
-                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
-                           <span class="date">Date goes here</span>
-                        </div>
-                    
-                        <div class = "post_content">
-                            content goes here :p
-                            <br>
-                            Im not required!
-                        </div>
-                        <div class="post_text">
-                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
-                                But I'd be too busy on working days
-                                So I am relieved that the turbulence wasn't forecasted
-                                I couldn't have changed anyways</p>
-                        </div>
-                        <div class= "post_interactables">
-                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
-                        </div>
-                    </div>
-                    <div class ="post">
-                        <div class= "post_header">
-                           <img class ="post_icon" src="{% static user.photo %}"> 
-                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
-                           <span class="date">Date goes here</span>
-                        </div>
-                    
-                        <div class = "post_content">
-                            content goes here :p
-                            <br>
-                            Im not required!
-                        </div>
-                        <div class="post_text">
-                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
-                                But I'd be too busy on working days
-                                So I am relieved that the turbulence wasn't forecasted
-                                I couldn't have changed anyways</p>
-                        </div>
-                        <div class= "post_interactables">
-                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
-                        </div>
-                    </div>
-                    <div class ="post">
-                        <div class= "post_header">
-                           <img class ="post_icon" src="{% static user.photo %}"> 
-                           <a class="post_username" href="{% url 'index' %}">{{user.username}}</a> 
-                           <span class="date">Date goes here</span>
-                        </div>
-                    
-                        <div class = "post_content">
-                            content goes here :p
-                            <br>
-                            Im not required!
-                        </div>
-                        <div class="post_text">
-                            <p><span class="post_username">{{user.username}}:</span> I always wanted to die clean and pretty
-                                But I'd be too busy on working days
-                                So I am relieved that the turbulence wasn't forecasted
-                                I couldn't have changed anyways</p>
-                        </div>
-                        <div class= "post_interactables">
-                            <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
-                        </div>
-                    </div>
-                    
-                    {% endfor %}
-                    
-                    {% else %}
-                    this account cannot make posts since its a fan account, this message is just temporary.
-                    {% endif %}
-                    {% else %}
-                    if a user existed, their posts would be here!
+                    {% if user %}
+                        {% if artist %}
+                        {% for post in posts %}
+                            <div class ="post">
+                                    <div class= "post_header">
+                                        <img class ="post_icon" src="{{user.profile.photo.url }}"> 
+                                        <a class="post_username" href="">{{user.username}}</a> 
+                                        <span class="date">{{post.date_posted}}</span>
+                                </div>
+                                {% if post.pic %}
+                                <div class = "post_content">
+                                    <img class ="" src="{{post.pic.url}}"> 
+                                </div>
+                                {%endif%}
+                                <div class="post_text">
+                                    <p>{{post.description}}</p>
+                                </div>
+                                <div class= "post_interactables">
+                                    <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

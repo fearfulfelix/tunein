@@ -16,6 +16,7 @@ class registrationForm(forms.Form):
 class profileForm(forms.Form):
     first_name = forms.CharField(label = 'First Name:')
     last_name = forms.CharField(label = 'Last Name:')
+    profilePicture = forms.ImageField(label = 'profile picture')
     bio = forms.CharField(label = 'bio:', widget=forms.Textarea)
 
 #these are individual forms for the settings page

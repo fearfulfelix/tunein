@@ -131,15 +131,17 @@ def createProfile(request):
 def processProfile(request):
     if request.user.is_authenticated and request.user.profile.first_name == "":
         if request.method== 'POST':
-            p = profileForm(request.POST)
+            p = profileForm(request.POST, request.FILES)
             if p.is_valid():
                 cleanProfile = p.cleaned_data
                 first = cleanProfile['first_name']
                 last = cleanProfile['last_name']
                 bio = cleanProfile['bio']
+                img = cleanProfile['profilePicture']
                 request.user.profile.first_name = first
                 request.user.profile.last_name = last
                 request.user.profile.bio = bio
+                request.user.profile.photo = img
                 request.user.profile.save()
     return HttpResponseRedirect('feed')
 
@@ -168,21 +170,18 @@ def createPost(request):
 
 #processes posts recieved from createPost
 #authenticates the user and their permissions again(just in case)
-#then validates the form, and creates a post model to store in the database
+#then validates the form, creates a model, adds the user info, then saves
 #sends users back to the feed once complete.
 def processPost(request):
     if request.user.is_authenticated and request.user.has_perm('canPost'):
         if request.method== 'POST':
-            p = NewPostForm(request.POST)
+            p = NewPostForm(request.POST, request.FILES)
             print(p)
             if p.is_valid:
                 print("valid")
-                CleanPost = p.cleaned_data
-                desc = CleanPost['description']
-                pic = CleanPost['pic']
-                tags = CleanPost['tags']
-                print(desc)
-                result = Post.objects.create(description=desc,pic=pic, tags=tags, user_name=request.user)
+                obj = p.save(commit=False)
+                obj.user_name = request.user
+                obj.save()
                 print("created!")
 
     return HttpResponseRedirect('feed')
