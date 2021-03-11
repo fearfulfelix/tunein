@@ -11,8 +11,11 @@ from news.models import Post, Comments, Like
 #-Felix
 
 #?
+
+
 def home(request):
     return render(request, 'home.html')
+
 
 #can we get rid of this?
 def add(request):
@@ -23,14 +26,18 @@ def add(request):
 
     return render(request, 'results.html', {'result': res})
 
+
 #the feed, essentially te users homepage.
 def feed(request):
     posts = Post.objects.all()
     posts = posts.order_by('-date_posted')
+    artist = request.user.groups.filter(name='artists').exists()
+    test = {'posts': posts, 'artist': artist}
     if request.user.is_authenticated:
-        return render(request, 'news.html', {'posts': posts})
+        return render(request, 'news.html', test)
     else:
         return HttpResponseRedirect('/') 
+
 
 #settings page, needs to be functional
 def settings(request):
@@ -40,7 +47,8 @@ def settings(request):
         return render(request,'settings.html',{"nameForm":name, "bioForm":bio})
     else:
         return HttpResponseRedirect('/')
-    
+
+
 def processSettings(request):
     if request.user.is_authenticated:
         if request.POST['formType'] == 'update Bio':
@@ -61,6 +69,7 @@ def processSettings(request):
 
                 
     return HttpResponseRedirect('settings')
+
 
 #processes the login form from the login page.
 #   uses the built in django authentication system to validate the provided user information
@@ -91,6 +100,7 @@ def processLogin(request):
             print("form error")
             return HttpResponseRedirect('/')
 
+
 #processes the user registration form from the login page
 #   simmilar to processlogin, where it uses the built in authentication system to validate users
 #   needs to provide error information to users upon failed registration
@@ -120,6 +130,7 @@ def processRegistration(request):
                 return HttpResponseRedirect('createProfile')
     return None            
 
+
 #creates a profile to match the newly created user 
 def createProfile(request):
     if request.user.is_authenticated and request.user.profile.first_name == "":
@@ -127,6 +138,7 @@ def createProfile(request):
         return render(request,'createProfile.html',{'profileForm':profile})
     else:
         return HttpResponseRedirect('processProfile')
+
 
 #processes the form retrieved from createProfile
 #   Updates the user.profile model currently logged in    
@@ -147,6 +159,7 @@ def processProfile(request):
                 request.user.profile.save()
     return HttpResponseRedirect('feed')
 
+
 #logs the user out, and sends them to the login page
 def processLogout(request):
     print("logging user out")
@@ -154,11 +167,13 @@ def processLogout(request):
     print("user logged out")
     return HttpResponseRedirect('/')
 
+
 #the login page, the two forms send the user to processLogin and processRegistration
 def loginIndex(request):
     form = loginForm()
     rform = registrationForm()
     return render(request, 'loginpage/index.html', {'LoginForm': form,'RegistrationForm': rform})
+
 
 #allows users to create posts, if they're logged in and have the canpost permission(exclusive to artists)
 #P sends users to processPost upon submitting
@@ -169,6 +184,7 @@ def createPost(request):
         return render(request,'createPost.html',{'postForm':p, 'user':request.user})
     else:
         return "You dont have permission to create posts."
+
 
 #processes posts recieved from createPost
 #authenticates the user and their permissions again(just in case)
