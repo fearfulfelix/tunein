@@ -73,6 +73,14 @@
     margin:2%;
 }
 
+.post_icon{
+    display:iline;
+    height:50px;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+    border-radius: 100%;
+}
 
 
 
@@ -84,8 +92,8 @@
 
     <div class="post">
         <div class="post_header">
-
-            <a class="post_username" href="{% url 'user_profile' %}">{{post.user_name}}</a>
+            <img class ="post_icon" src="{{post.user_name.profile.photo.url }}">
+            <a class="post_username" href="{% url 'user_profile' %}?username={{post.user_name}}">{{post.user_name}}</a>
             <p id="date">{{post.date_posted}}</p>
         </div>
 

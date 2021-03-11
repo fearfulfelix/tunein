@@ -12,7 +12,7 @@
                 <div class="names">
                     <h1 id="name">{{user.profile.first_name}} {{user.profile.last_name}}</h1>
                     <h2 id="username">{{user.username}}</h2><span class="account_type">{% if artist%}Artist{%else%}Fan{%endif%}</span>
-                    <h3>following:<span id="following"> NAN </span> 
+                    <h3>following:<span id="following"> {{user.profile.following}} </span>
                         {% if artist %}
                         • followers: <span id="followers"> NAN </span></h3>
                         {% endif %}

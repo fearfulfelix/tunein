@@ -6,6 +6,8 @@ from news.models import Post
 # Create your views here.
 
 #profile page
+
+
 def index(request):
     #makes sure user is logged in
     if request.user.is_authenticated:
