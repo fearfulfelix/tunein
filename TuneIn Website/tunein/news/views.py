@@ -25,8 +25,10 @@ def add(request):
 
 #the feed, essentially te users homepage.
 def feed(request):
+    posts = Post.objects.all()
+    posts = posts.order_by('-date_posted')
     if request.user.is_authenticated:
-        return render(request, 'news.html')
+        return render(request, 'news.html', {'posts': posts})
     else:
         return HttpResponseRedirect('/') 
 

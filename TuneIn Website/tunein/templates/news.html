@@ -79,27 +79,27 @@
 </style>
 
 <!-- HTML Layout for posts on the news page -->
+{% for post in posts %}
 <div class="posts">
 
     <div class="post">
         <div class="post_header">
 
-            <a class="post_username" href="{% url 'home' %}">{{user.username}}</a>
-            <p id="date"></p>
+            <a class="post_username" href="{% url 'user_profile' %}">{{post.user_name}}</a>
+            <p id="date">{{post.date_posted}}</p>
         </div>
 
         <div class="post_content">
-            content goes here :p
-            <br>
-            Im not required!
+            <img src="{{post.pic}}">
+
+
         </div>
         <div class="post_text">
-            <p><span class="post_username">{{user.username}}:</span> Lorem ipsum dolor sit amet, consectetur adipiscing
-                elit. Aenean ut arcu a mauris aliquet feugiat at a orci. Donec vitae tellus et ex consequat fringilla
-                quis ut elit. Praesent consequat dolor ac dolor fringilla egestas. Phasellus et finibus ex. Duis id
-                turpis sit amet eros pharetra eleifend ut ut risus. Sed velit lectus, interdum a rutrum non, varius nec
-                nisi. Proin dictum ante eget ultricies fermentum. Sed at hendrerit dolor. Duis mattis dui purus, nec
-                dignissim turpis venenatis vel. Sed vel tortor purus.</p>
+            <p>
+
+                   {{post.description}}
+
+            </p>
         </div>
         <div class="post_interactables">
             <div>❤Like</div>
@@ -108,8 +108,9 @@
         </div>
     </div>
 </div>
+{% endfor %}
 
-<script>
+<!--<script>
 
     n =  new Date();
     y = n.getFullYear();
@@ -129,6 +130,6 @@
 
 
 
-</script>
+</script>-->
 
 {% endblock %}
