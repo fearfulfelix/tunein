@@ -3,6 +3,23 @@
     {% block content %}
     <br>
     <link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        function follow(){
+            $.ajax({
+        url: 'follow_user',
+        data: {
+          'target': document.getElementById("username").innerText
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.message) {
+            alert(data.message);
+          }
+        }
+      });
+        }
+    </script>
     <div class="gridLayout">
         <div class="leftBorder"></div>
         <div class="middle">
@@ -20,7 +37,7 @@
                         
                         <script type="text/javascript" >
                             if("{{artist}}"){
-                                var a = parseInt("{{user.profile.followers}}");
+                                var a = parseInt("{{followers}}");
                                 console.log(a);
                                 if(a < 1000){
                                     document.getElementById("followers").innerHTML =a;
@@ -30,7 +47,7 @@
                                     document.getElementById("followers").innerText = (a/1000000).toPrecision(2) + "M";
                                 }
                             }
-                            var a = parseInt("{{user.profile.following}}");
+                            var a = parseInt("{{following}}");
                             console.log(a);
                             if(a < 1000){
                                 document.getElementById("following").innerHTML =a;
@@ -40,7 +57,7 @@
                                 document.getElementById("following").innerText = (a/1000000).toPrecision(2) + "M";
                             }
                         </script>
-                        
+                        <button type="button" onclick="follow()">Follow +</button>
                     </div>
                     <br>
                     <div class="bio">
@@ -55,7 +72,6 @@
                 <br>
                 <br>
                 <div class="posts">
-                    <!-- reversed because posts dont exist yet removing the not will break the page-->
                     {% if user %}
                         {% if artist %}
                         {% for post in posts %}
