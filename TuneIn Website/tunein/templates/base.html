@@ -3,6 +3,23 @@
 <html lang="en">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+function checkForNotifs(){
+            $.ajax({
+        url: 'send_notifcations',
+
+        success: function (data) {
+          if (data.requests) {
+            $.each(data.requests, function(index, value) {
+                alert("You got a friend request from " + value['sender']);
+            });
+          }
+        }
+      });
+    }
+    checkForNotifs();
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -63,7 +80,20 @@
     display:inline;
 }
 
+.notificaiton {
+  position: relative;
+  display: inline-block;
+}
+.notificaiton:hover .notification_container {display: block;}
 
+.notification_container{
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
     </style>
 </head>
 <body>
@@ -87,8 +117,16 @@
         <div class="links">
         <li><a href="{% url 'user_profile' %}">🏠Profile</a></li>
         <li><a href="{% url 'feed' %}">🎶Feed</a></li>
+        <li> 
+            <div class='notificaiton'>🔔Notifications
+                <div class='notification_container'>
+                    <div class='notifications_go_here'>
+                        nothing to see here :)
+                    </div>
+                </div>
+            </div>
+        </li>
         <li><a href="{% url 'settings' %}">⚙Settings</a></li>
-        </div>
         <li><a href="{% url 'logout' %}">🚪Logout</a></li>
     </ul>
 </div>

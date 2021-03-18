@@ -32,10 +32,24 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 #a model containing a user and a follower, this is used to store the users following and being followed
+#only artists should be allowed to be followed
 class Following(models.Model):
     #id is the primary key in this model, and is created by django itself
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+
+#a model containing a user and a friend, this is used to store the relationship between friends <3
+#at the moment, two entries are required to be friends, but this is redundant and we should fix it if possible
+class Friends(models.Model):
+    #id is the primary key in this model, and is created by django itself
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='targetFriend')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sourceFriend')
+
+#a model containing a user and a friend, this is used to store the users friend requests 
+class FriendRequest(models.Model):
+    #id is the primary key in this model, and is created by django itself
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friendRequestTarget')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='RequestSender')
 
 #this is a wip, not exactly sure where to go with it, sorry
 class Music(models.Model):

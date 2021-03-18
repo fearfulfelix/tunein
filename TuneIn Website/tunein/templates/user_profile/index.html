@@ -19,6 +19,22 @@
         }
       });
         }
+
+        function friend(){
+            $.ajax({
+        url: 'friend_request_user',
+        data: {
+          'target': document.getElementById("username").innerText
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.message) {
+            alert(data.message);
+          }
+        }
+      });
+        }
+
     </script>
     <div class="gridLayout">
         <div class="leftBorder"></div>
@@ -58,6 +74,7 @@
                             }
                         </script>
                         <button type="button" onclick="follow()">Follow +</button>
+                        <button type="button" onclick="friend()">Friend +</button>
                     </div>
                     <br>
                     <div class="bio">
