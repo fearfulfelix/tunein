@@ -64,3 +64,14 @@ class Music(models.Model):
 
     def __str__(self):
         return self.name
+
+class NotificationBridge(models.Model):
+    notificationType = models.CharField(max_length=20,default="NONE")
+    friendRequest = models.OneToOneField(FriendRequest, on_delete=models.CASCADE, null=True)
+    following = models.OneToOneField(Following, on_delete=models.CASCADE, null=True)
+    friend = models.OneToOneField(Friends, on_delete=models.CASCADE, null=True)
+    #add more for each other notification type
+
+class Notification(models.Model):
+    source = models.OneToOneField(NotificationBridge, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifReceiver')

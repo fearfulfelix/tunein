@@ -1,138 +1,234 @@
 <!doctype html>
 {% load static  %}
+{% csrf_token %}
 <html lang="en">
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script>
-function checkForNotifs(){
-            $.ajax({
-        url: 'send_notifcations',
 
-        success: function (data) {
-          if (data.requests) {
-            $.each(data.requests, function(index, value) {
-                alert("You got a friend request from " + value['sender']);
-            });
-          }
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+<script src = "{%static 'js/profile.js' %}" defer></script><!-- defered to avoid nulled input-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/animations.css'%}">
+
+<script>
+    var appurl = "{% url 'ajax:root' %}"
+
+    function createNotification(value){
+
+        switch(value['type']){
+            case 'Friend':
+                var notification = document.createElement("DIV");
+                notification.classList.add('notification')
+                var message = document.createElement("P");
+                var dismiss = document.createElement('BUTTON');
+                dismiss.classList.add("button");
+                dismiss.innerHTML = "X";
+                dismiss.onclick =function(){delete_notification(value['type'],value['from'])}; //if you assign the function directly it gets called, we don't want that
+                message.innerText = value['from'] + ' added you as a friend!';
+                $(notification).append(message);
+                $(notification).append(dismiss);
+                
+                $("#notifications_go_here").append(notification);
+            break;
+            case 'Follow':
+                var notification = document.createElement("DIV");
+                var message = document.createElement("P");
+                var dismiss = document.createElement('BUTTON');
+                dismiss.classList.add("button");
+                dismiss.innerHTML = "X";
+                dismiss.onclick =function(){delete_notification(value['type'],value['from'])}; //if you assign the function directly it gets called, we don't want that
+                message.innerText = value['from'] + ' just followed you!';
+                $(notification).append(message);
+                $(notification).append(dismiss);
+                $("#notifications_go_here").append(notification);
+            break;
+            case 'FriendRequest':
+                var notification = document.createElement("DIV");
+                notification.id = 'notif_'+i;
+                var message = document.createElement("P");
+                message.innerText = 'You recieved a friend request from: ' + value['from'];
+                var accept = document.createElement("BUTTON");
+                accept.classList.add("button");
+                accept.innerHTML = "Accept";
+                accept.onclick =function(){accept_friend_request(value['from'])}; //if you assign the function directly it gets called, we don't want that
+                var deny = document.createElement("BUTTON");
+                deny.classList.add("button");
+                deny.innerHTML = "Deny";
+                deny.onclick =function(){reject_friend_request(value['from'])}; //if you assign the function directly it gets called, we don't want that
+                $(notification).append(message);
+                $(notification).append(accept);
+                $(notification).append(deny);
+                $("#notifications_go_here").append(notification);
+            break;
+
         }
-      });
+    }
+    function checkForNotifs(){
+        $.ajax({
+            url: "{% url 'ajax:send_notifcations' %}",
+            
+            success: function (data) {
+                if (data.notifications) {
+                    $("#notifications_go_here").empty();
+                    i = 0;
+                    $.each(data.notifications, function(index, value) {
+                        i++;
+                        createNotification(value);
+                    });
+                    $("#notification_title").text('🔔Notifications(' + i +')');
+                }
+            }
+        });
     }
     checkForNotifs();
+    setInterval(checkForNotifs, 10000);
 </script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TuneIn</title>
     <style>
-    body{
-    color: #8c9499;
-    background-color: #222132;
-    }
-
-    .header{
-    padding:1%;
-    border-radius: 0px 0px 25px 25px;
-    text-align:center;
-    background-color:#E08500;
-    }
-
-    .search{
-    float: left;
-    }
-
-    .search input{
-    border-radius: 25px;
-    border-width: 0;
-}
-
-    ul {
-    color:white;
-    text-align: right;
-    list-style-type: none;
-    margin: 0;
-
-  }
-  li {
-    padding-left: 2%;
-    display: inline;
-  }
-  body{
-      margin:0;
-      background-color: #222132;
-      color:white;
-      font-family: 'Open Sans', sans-serif;
-  }
-
-  .logo {
-    padding-right: 1%;
-    float: left;
-    }
-
-    .header a{
-    text-decoration: none;
+        body{
+            color: #8c9499;
+            background-color: #222132;
+        }
+        
+        .header{
+            padding:1%;
+            border-radius: 0px 0px 25px 25px;
+            text-align:center;
+            background-color:#E08500;
+        }
+        
+        .search{
+            float: left;
+        }
+        
+        .search input{
+            border-radius: 25px;
+            border-width: 0;
+        }
+        .button{
+            width: 40%;
+    background-color: #E08500;
     color: white;
-}
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+        }
+        ul {
+            color:white;
+            text-align: right;
+            list-style-type: none;
+            margin: 0;
+            
+        }
+        li {
+            padding-left: 2%;
+            display: inline;
+        }
+        body{
+            margin:0;
+            background-color: #222132;
+            color:white;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .logo {
+            padding-right: 1%;
+            float: left;
+        }
+        
+        .header a{
+            text-decoration: none;
+            color: white;
+        }
+        
+        .links {
+            display:inline;
+        }
+        
+        .notification {
+            position: relative;
+            display: inline-block;
+        }
+        .notification:hover .notification_container {display: block;}
+        
+        .notification_container{
+            color:#222132;
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .message_container{
+            position:absolute;
+            z-index:2;
+            width: 100%;
+            text-align: center;
+            align-content: center;
+        }
+        .message{
+            
+            border:2px;
+            border-style: solid;
+            border-color: #e6a94d;
+            background-color: #e6a94d;
+            text-align: center;
+            align-content: center;
+            align-self: center;
+            margin:auto;
+            margin-top: 5px;
+            width:50%;
+            border-radius: 25px;
+            overflow: hidden;
+            max-height:auto;
+        }
 
-.links {
-    display:inline;
-}
-
-.notificaiton {
-  position: relative;
-  display: inline-block;
-}
-.notificaiton:hover .notification_container {display: block;}
-
-.notification_container{
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
     </style>
 </head>
 <body>
-<div class="header">
-    <ul>
-        <!-- TuneIn Logo with link to news page-->
-        <li><a href="{% url 'feed' %}"><div class="logo"><img src="{% static 'tuneinLogo.png' %}" alt="TuneIn" width="28" height="28"/></div></a></li>
-        <!-- <li class="title">Tune In</li> -->
-        <!-- li>Username goes here</li> -->
-
-        <li>
-            <div class="search">
-                <!-- search field and button -->
-                <form action="{% url 'user_profile' %}">
-                    <input type="submit" value="🔎">
-                    <input type="text" id="usernameField" name="username" placeholder="Search TuneIn Users...">
-                </form>
-            </div>
-        </li>
-        <!-- Links to other pages on the site -->
-        <div class="links">
-        <li><a href="{% url 'user_profile' %}">🏠Profile</a></li>
-        <li><a href="{% url 'feed' %}">🎶Feed</a></li>
-        <li> 
-            <div class='notificaiton'>🔔Notifications
-                <div class='notification_container'>
-                    <div class='notifications_go_here'>
-                        nothing to see here :)
-                    </div>
+    <div class='message_container' id='messages_go_here'></div>
+    <div class="header">
+        <ul>
+            <!-- TuneIn Logo with link to news page-->
+            <li><a href="{% url 'feed' %}"><div class="logo"><img src="{% static 'tuneinLogo.png' %}" alt="TuneIn" width="28" height="28"/></div></a></li>
+            <!-- <li class="title">Tune In</li> -->
+            <!-- li>Username goes here</li> -->
+            
+            <li>
+                <div class="search">
+                    <!-- search field and button -->
+                    <form action="{% url 'user_profile' %}">
+                        <input type="submit" value="🔎">
+                        <input type="text" id="usernameField" name="username" placeholder="Search TuneIn Users...">
+                    </form>
                 </div>
-            </div>
-        </li>
-        <li><a href="{% url 'settings' %}">⚙Settings</a></li>
-        <li><a href="{% url 'logout' %}">🚪Logout</a></li>
-    </ul>
-</div>
-{% block content %}
-
-{% endblock %}
-
-</body>
-</html>
+            </li>
+            <!-- Links to other pages on the site -->
+            <div class="links">
+                <li><a href="{% url 'user_profile' %}">🏠Profile</a></li>
+                <li><a href="{% url 'feed' %}">🎶Feed</a></li>
+                <li> 
+                    <div class='notification' ><span id='notification_title'>🔔Notifications(0)</span>
+                        <div class='notification_container'>
+                            <div class='notifications_go_here' id="notifications_go_here">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="{% url 'settings' %}">⚙Settings</a></li>
+                <li><a href="{% url 'logout' %}">🚪Logout</a></li>
+            </ul>
+        </div>
+        {% block content %}
+        
+        {% endblock %}
+        
+    </body>
+    </html>
