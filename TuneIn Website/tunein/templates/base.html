@@ -3,7 +3,6 @@
 {% csrf_token %}
 <html lang="en">
 <link rel="preconnect" href="https://fonts.gstatic.com">
-
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 <script src = "{%static 'js/profile.js' %}" defer></script><!-- defered to avoid nulled input-->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -17,7 +16,7 @@
         switch(value['type']){
             case 'Friend':
                 var notification = document.createElement("DIV");
-                notification.classList.add('notification')
+                notification.classList.add('notification_message');
                 var message = document.createElement("P");
                 var dismiss = document.createElement('BUTTON');
                 dismiss.classList.add("button");
@@ -26,11 +25,11 @@
                 message.innerText = value['from'] + ' added you as a friend!';
                 $(notification).append(message);
                 $(notification).append(dismiss);
-                
                 $("#notifications_go_here").append(notification);
             break;
             case 'Follow':
                 var notification = document.createElement("DIV");
+                notification.classList.add('notification_message');
                 var message = document.createElement("P");
                 var dismiss = document.createElement('BUTTON');
                 dismiss.classList.add("button");
@@ -43,7 +42,7 @@
             break;
             case 'FriendRequest':
                 var notification = document.createElement("DIV");
-                notification.id = 'notif_'+i;
+                notification.classList.add('notification_message');
                 var message = document.createElement("P");
                 message.innerText = 'You recieved a friend request from: ' + value['from'];
                 var accept = document.createElement("BUTTON");
@@ -187,6 +186,9 @@
             width:50%;
             border-radius: 25px;
             overflow: hidden;
+            max-height:auto;
+        }
+        .notification_message{
             max-height:auto;
         }
 

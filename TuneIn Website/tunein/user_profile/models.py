@@ -75,3 +75,4 @@ class NotificationBridge(models.Model):
 class Notification(models.Model):
     source = models.OneToOneField(NotificationBridge, on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifReceiver')
+
