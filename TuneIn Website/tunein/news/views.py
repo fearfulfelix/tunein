@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from user_profile.forms import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
-from user_profile.models import User
+from user_profile.models import User, Following, Friends
 from news.forms import NewPostForm, NewCommentForm
-from news.models import Post, Comments, Like
+from news.models import Post, Comment, Like
 # Create your views here.
 #I went through and added comments, feel free to modify them 
 #-Felix
@@ -27,13 +27,20 @@ def add(request):
     return render(request, 'results.html', {'result': res})
 
 
-#the feed, essentially te users homepage.
+#the feed, essentially the users homepage.
 def feed(request):
-    posts = Post.objects.all()
-    posts = posts.order_by('-date_posted')
-    artist = request.user.groups.filter(name='artists').exists()
-    test = {'posts': posts, 'artist': artist}
     if request.user.is_authenticated:
+        following = Following.objects.filter(follower= request.user)
+        following_list = []
+        for f in following:
+            following_list.append(getattr(f,'user'))
+        if following:
+            posts = Post.objects.filter(user_name__in=following_list)
+        else:
+            posts = Post.objects.all()
+        posts = posts.order_by('-date_posted')
+        artist = request.user.groups.filter(name='artists').exists()
+        test = {'posts': posts, 'artist': artist}
         return render(request, 'news.html', test)
     else:
         return HttpResponseRedirect('/') 

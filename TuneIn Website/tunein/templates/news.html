@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+<script src="{%static 'js/postInteraction.js' %}"></script>
 <!-- Inline style -->
 <style>
 
@@ -87,11 +88,12 @@
 </style>
 
 <!-- HTML Layout for posts on the news page -->
+<div class="posts">
 {% for post in posts %}
 
-<div class="posts">
 
-    <div class="post">
+
+    <div class="post" id="{{post.id}}">
         <div class="post_header">
             <img class ="post_icon" src="{{post.user_name.profile.photo.url }}">
             <a class="post_username" href="{% url 'user_profile' %}?username={{post.user_name}}">{{post.user_name}}</a>
@@ -111,17 +113,19 @@
             </p>
         </div>
         <div class="post_interactables">
-            <div>❤Like</div>
-            <div>💬Comment</div>
-            {% if artist %}
-            <div>📩Share</div>
-            {% endif %}
+            <div><button onclick='likePost({{post.id}})' id='likeButton'>❤Like</button></div>
+            <div><button onclick='showCommentForm({{post.id}})'>💬Comment</button></div>
+            <div><button onclick='sharePost({{post.id}})'></button>📩Share</button></div>
         </div>
     </div>
-</div>
+<script>
+    isLiked({{post.id}});
+</script>
 {% endfor %}
-
-<!--<script>
+</div>
+<!--
+    what is this?
+    <script>
 
     n =  new Date();
     y = n.getFullYear();

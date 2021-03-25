@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from user_profile.models import User, Following,FriendRequest, Friends, Notification, NotificationBridge
+from news.models import Post,Like,Comment
 # Create your views here.
 
 #processes a follow request, will also account for unfollowing soon
@@ -182,4 +183,41 @@ def delete_notification(request):
     elif request.GET.get('type') == 'FriendRequest':
         friendRequest =  FriendRequest.objects.get(user=request.user, friend= request.GET.get('from'))
         NotificationBridge.objects.get(notificationType = request.GET.get('type'), friendRequest= friend).delete()
+    return JsonResponse(data)
+
+
+def likePost(request):
+    data={}
+    post = Post.objects.get(id=request.GET.get('postID'))
+    if post:
+        alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
+        if alreadyLiked:
+            data={'message':'already Liked'}
+        else:
+            like = Like.objects.create(originPost=post, user = request.user)
+            data={'message':'post liked'}
+    return JsonResponse(data)
+
+def unlikePost(request):
+    data={}
+    post = Post.objects.get(id=request.GET.get('postID'))
+    if post:
+        alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
+        if alreadyLiked:
+            alreadyLiked.delete()
+            data={'message':'Unliked'}
+        else:
+            data={'message':'post was never liked'}
+    return JsonResponse(data)
+    
+def isLiked(request):
+    data={}
+    post = Post.objects.get(id=request.GET.get('postID'))
+    if post:
+        alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
+        if alreadyLiked:
+            alreadyLiked.delete()
+            data={'liked':True}
+        else:
+            data={'liked':False}
     return JsonResponse(data)

@@ -14,5 +14,9 @@ urlpatterns = [
     path('unfollow_user', views.unfollow_user, name='unfollow_user'),
     path('unfriend_user', views.unfriend_user, name='unfriend_user'),
     path('cancel_friend_request',views.cancel_friend_request,name='cancel_friend_request'),
-    path('delete_notification',views.delete_notification,name='delete_notification')
+    path('delete_notification',views.delete_notification,name='delete_notification'),
+    path('likePost',views.likePost,name='likePost'),
+    path('unlikePost',views.unlikePost,name='unlikePost'),
+    path('isLiked',views.isLiked,name='isLiked')
+
 ]

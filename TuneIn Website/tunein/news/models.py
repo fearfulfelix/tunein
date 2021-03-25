@@ -19,13 +19,11 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
 
-class Comments(models.Model):
-    post = models.ForeignKey(Post, related_name='details', on_delete=models.CASCADE)
-    username = models.ForeignKey(User, related_name='details', on_delete=models.CASCADE)
-    comment = models.CharField(max_length=255)
-    comment_date = models.DateTimeField(default=timezone.now)
-
+class Comment(models.Model):
+    originPost = models.ForeignKey(Post, on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.CharField(max_length=1000) 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
+    originPost = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
