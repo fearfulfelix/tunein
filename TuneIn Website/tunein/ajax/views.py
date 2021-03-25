@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from user_profile.models import User, Following,FriendRequest, Friends, Notification, NotificationBridge
 from news.models import Post,Like,Comment
+from news.forms import NewCommentForm
 # Create your views here.
 
 #processes a follow request, will also account for unfollowing soon
@@ -220,4 +221,30 @@ def isLiked(request):
             data={'liked':True}
         else:
             data={'liked':False}
+    return JsonResponse(data)
+
+def getComments(request):
+    comments=[]
+    amountOfComments = 0
+    post = Post.objects.get(id=request.GET.get('postID'))
+    if post:
+        postComments = Comment.objects.filter(originPost=post)
+        if postComments:
+            amountOfComments = Comment.objects.filter(originPost=post).count()
+            for c in postComments:
+                commentInfo = {'user':getattr(getattr(c,'user'),'username'), 'message': getattr(c,'message')}
+                comments.append(commentInfo)
+        data={'comments':comments, 'amount': amountOfComments} 
+    return JsonResponse(data)
+
+
+def postComment(request):
+    data = {}
+    message = request.GET.get('message')
+    user = request.user
+    post = Post.objects.get(id=request.GET.get('postID'))
+    if post:
+        Comment.objects.create(originPost=post, user=user, message=message)
+        data = {'message':'posted'}
+
     return JsonResponse(data)

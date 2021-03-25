@@ -17,6 +17,7 @@ urlpatterns = [
     path('delete_notification',views.delete_notification,name='delete_notification'),
     path('likePost',views.likePost,name='likePost'),
     path('unlikePost',views.unlikePost,name='unlikePost'),
-    path('isLiked',views.isLiked,name='isLiked')
-
+    path('isLiked',views.isLiked,name='isLiked'),
+    path('getComments',views.getComments,name='getComments'),
+    path('postComment',views.postComment,name='postComment')
 ]

@@ -83,6 +83,14 @@
     border-radius: 100%;
 }
 
+.comment-Container{
+    background-color: #1A1B2F;
+    border-radius: 25px;
+    position: absolute;
+    width:90%;
+    margin:5%;
+    align-content: center;
+}
 
 
 </style>
@@ -113,9 +121,10 @@
             </p>
         </div>
         <div class="post_interactables">
+            <!-- these arent errors, dont treat them as such-->
             <div><button onclick='likePost({{post.id}})' id='likeButton'>❤Like</button></div>
-            <div><button onclick='showCommentForm({{post.id}})'>💬Comment</button></div>
-            <div><button onclick='sharePost({{post.id}})'></button>📩Share</button></div>
+            <div><button onclick='showCommentPopup({{post.id}})'>💬Comment</button></div>
+            <div><button onclick='sharePost({{post.id}})'>📩Share</button></div>
         </div>
     </div>
 <script>
