@@ -23,4 +23,5 @@ urlpatterns = [
     #path('loginpage/', include('loginpage.urls')),
     path('admin/', admin.site.urls),
     path('user_profile/', include('user_profile.urls')),
+    path('ajax/', include('ajax.urls',namespace = "ajax")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

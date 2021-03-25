@@ -1,90 +1,97 @@
 {% extends 'base.html' %}
 {% load static %}
-    {% block content %}
-    <br>
-    <link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
-    <div class="gridLayout">
-        <div class="leftBorder"></div>
-        <div class="middle">
-            <div class="topInfo">
-                {% if user %}
-                <div class="c_icon"><img class ="icon" src="{{user.profile.photo.url }}"></div>
-                <div class="names">
-                    <h1 id="name">{{user.profile.first_name}} {{user.profile.last_name}}</h1>
-                    <h2 id="username">{{user.username}}</h2><span class="account_type">{% if artist%}Artist{%else%}Fan{%endif%}</span>
-                    <h3>following:<span id="following"> {{user.profile.following}} </span>
-                        {% if artist %}
-                        • followers: <span id="followers"> NAN </span></h3>
-                        {% endif %}
-                        
-                        
-                        <script type="text/javascript" >
-                            if("{{artist}}"){
-                                var a = parseInt("{{user.profile.followers}}");
-                                console.log(a);
-                                if(a < 1000){
-                                    document.getElementById("followers").innerHTML =a;
-                                } else if(a > 1000 && a < 1000000){
-                                    document.getElementById("followers").innerHTML = (a/1000).toPrecision(2) + "K";
-                                } else if(a> 1000000){
-                                    document.getElementById("followers").innerText = (a/1000000).toPrecision(2) + "M";
-                                }
-                            }
-                            var a = parseInt("{{user.profile.following}}");
+{% block content %}
+<br>
+<link rel="stylesheet" href="{% static 'user_profile/index.css' %}">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src = "{%static 'js/checkStatus.js' %}" defer></script><!-- defered to avoid nulled input-->
+<div class="gridLayout">
+    <div class="leftBorder"></div>
+    <div class="middle">
+        <div class="topInfo">
+            {% if user %}
+            <div class="c_icon"><img class ="icon" src="{{user.profile.photo.url }}"></div>
+            <div class="names">
+                <h1 id="name">{{user.profile.first_name}} {{user.profile.last_name}}</h1>
+                <h2 id="username">{{user.username}}</h2><span class="account_type">{% if artist%}Artist{%else%}Fan{%endif%}</span>
+                <h3>following:<span id="following"> {{user.profile.following}} </span>
+                    {% if artist %}
+                    • followers: <span id="followers"> NAN </span></h3>
+                    {% endif %}
+                    
+                    
+                    <script type="text/javascript" >
+                        if("{{artist}}" == "True"){
+                            var a = parseInt("{{followers}}");
                             console.log(a);
                             if(a < 1000){
-                                document.getElementById("following").innerHTML =a;
+                                document.getElementById("followers").innerHTML =a;
                             } else if(a > 1000 && a < 1000000){
-                                document.getElementById("following").innerHTML = (a/1000).toPrecision(2) + "K";
+                                document.getElementById("followers").innerHTML = (a/1000).toPrecision(2) + "K";
                             } else if(a> 1000000){
-                                document.getElementById("following").innerText = (a/1000000).toPrecision(2) + "M";
+                                document.getElementById("followers").innerText = (a/1000000).toPrecision(2) + "M";
                             }
-                        </script>
-                        
-                    </div>
-                    <br>
-                    <div class="bio">
-                        Bio:
-                        <p id="bio">{{user.profile.bio}}</p>
-                    </div>
-                    {% else %}
-                    User not found? 
-                    Make sure the username in the url matches who you're looking for!
-                    {% endif %}
+                        }
+                        var a = parseInt("{{following}}");
+                        console.log(a);
+                        if(a < 1000){
+                            document.getElementById("following").innerHTML =a;
+                        } else if(a > 1000 && a < 1000000){
+                            document.getElementById("following").innerHTML = (a/1000).toPrecision(2) + "K";
+                        } else if(a> 1000000){
+                            document.getElementById("following").innerText = (a/1000000).toPrecision(2) + "M";
+                        }
+                    </script>
+                    {%if otherUser%}
+                    {%if artist%}
+                    <button id='followButton' type="button" onclick="follow('{{user.username}}')" class='button'>Follow +</button>
+                    {%endif%}
+                    <button id='friendButton' type="button" onclick="friend('{{user.username}}')" class ='button'>Friend +</button>
+                    {%endif%}
                 </div>
                 <br>
-                <br>
-                <div class="posts">
-                    <!-- reversed because posts dont exist yet removing the not will break the page-->
-                    {% if user %}
-                        {% if artist %}
-                        {% for post in posts %}
-                            <div class ="post">
-                                    <div class= "post_header">
-                                        <img class ="post_icon" src="{{user.profile.photo.url }}"> 
-                                        <a class="post_username" href="">{{user.username}}</a> 
-                                        <span class="date">{{post.date_posted}}</span>
-                                </div>
-                                {% if post.pic %}
-                                <div class = "post_content">
-                                    <img class ="" src="{{post.pic.url}}"> 
-                                </div>
-                                {%endif%}
-                                <div class="post_text">
-                                    <p>{{post.description}}</p>
-                                </div>
-                                <div class= "post_interactables">
-                                    <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        {% endif %}
-                    {% endif %}
+                <div class="bio">
+                    Bio:
+                    <p id="bio">{{user.profile.bio}}</p>
                 </div>
+                {% else %}
+                User not found? 
+                Make sure the username in the url matches who you're looking for!
+                {% endif %}
             </div>
-            <div class="rightBorder"></div>
-            
+            <br>
+            <br>
+            <div class="posts">
+                {% if user %}
+                {% if artist %}
+                {% for post in posts %}
+                <div class ="post">
+                    <div class= "post_header">
+                        <img class ="post_icon" src="{{user.profile.photo.url }}"> 
+                        <a class="post_username" href="">{{user.username}}</a> 
+                        <span class="date">{{post.date_posted}}</span>
+                    </div>
+                    {% if post.pic %}
+                    <div class = "post_content">
+                        <img class ="" src="{{post.pic.url}}"> 
+                    </div>
+                    {%endif%}
+                    <div class="post_text">
+                        <p>{{post.description}}</p>
+                    </div>
+                    <div class= "post_interactables">
+                        <div>❤Like</div> <div>💬Comment</div> <div>📩Share</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endif %}
+            </div>
         </div>
-        <div class="foot">This page is still a work in progress</div>
+        <div class="rightBorder"></div>
+        
     </div>
-    {% endblock %}
+    <div class="foot">This page is still a work in progress</div>
+</div>
+{% endblock %}
