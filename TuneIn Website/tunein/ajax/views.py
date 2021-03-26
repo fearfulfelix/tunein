@@ -232,7 +232,8 @@ def getComments(request):
         if postComments:
             amountOfComments = Comment.objects.filter(originPost=post).count()
             for c in postComments:
-                commentInfo = {'user':getattr(getattr(c,'user'),'username'), 'message': getattr(c,'message')}
+
+                commentInfo = {'user':getattr(getattr(c,'user'),'username'), 'message': getattr(c,'message'),'isUser':getattr(c,'user') == request.user}
                 comments.append(commentInfo)
         data={'comments':comments, 'amount': amountOfComments} 
     return JsonResponse(data)
@@ -245,6 +246,18 @@ def postComment(request):
     post = Post.objects.get(id=request.GET.get('postID'))
     if post:
         Comment.objects.create(originPost=post, user=user, message=message)
+        #send notif to origin user plz
         data = {'message':'posted'}
+
+    return JsonResponse(data)
+
+def deleteComment(request):
+    data = {}
+    message = request.GET.get('message')
+    user= request.user
+    post = Post.objects.get(id=request.GET.get('postID'))
+    if post:
+        Comment.objects.filter(originPost= post, user = user, message=message).delete()
+        data={'message':'deleted'}
 
     return JsonResponse(data)
