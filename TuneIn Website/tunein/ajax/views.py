@@ -217,7 +217,6 @@ def isLiked(request):
     if post:
         alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
         if alreadyLiked:
-            alreadyLiked.delete()
             data={'liked':True}
         else:
             data={'liked':False}
