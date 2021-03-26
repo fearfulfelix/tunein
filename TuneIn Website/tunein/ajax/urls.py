@@ -20,5 +20,6 @@ urlpatterns = [
     path('isLiked',views.isLiked,name='isLiked'),
     path('getComments',views.getComments,name='getComments'),
     path('postComment',views.postComment,name='postComment'),
-    path('deleteComment',views.deleteComment,name='deleteComment')
+    path('deleteComment',views.deleteComment,name='deleteComment'),
+    path('shareToFriends',views.shareToFriends,name='shareToFriends')
 ]

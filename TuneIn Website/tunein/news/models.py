@@ -18,6 +18,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
+class SharedPost(models.Model):
+    originPost = models.ForeignKey(Post, on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_posted = models.DateTimeField(default=timezone.now)
+    description = models.CharField(max_length=255, blank=True)
+
 
 class Comment(models.Model):
     originPost = models.ForeignKey(Post, on_delete=models.CASCADE,null=True)

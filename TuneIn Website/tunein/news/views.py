@@ -5,7 +5,9 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from user_profile.models import User, Following, Friends
 from news.forms import NewPostForm, NewCommentForm
-from news.models import Post, Comment, Like
+from news.models import Post, Comment, Like,SharedPost
+from datetime import datetime
+from operator import itemgetter
 # Create your views here.
 #I went through and added comments, feel free to modify them 
 #-Felix
@@ -36,11 +38,19 @@ def feed(request):
             following_list.append(getattr(f,'user'))
         if following:
             posts = Post.objects.filter(user_name__in=following_list)
+            sharedPosts = SharedPost.objects.filter(user__in=following_list)
+            sharedPosts = sharedPosts.order_by('-date_posted')
+
         else:
             posts = Post.objects.all()
         posts = posts.order_by('-date_posted')
         artist = request.user.groups.filter(name='artists').exists()
-        test = {'posts': posts, 'artist': artist}
+
+        if SharedPost.objects.filter(user__in=following_list):
+            test = {'posts': posts, 'artist': artist}
+            print('user has shared posts that they can"t see yet :(')
+        else:
+            test = {'posts': posts, 'artist': artist}
         return render(request, 'news.html', test)
     else:
         return HttpResponseRedirect('/') 

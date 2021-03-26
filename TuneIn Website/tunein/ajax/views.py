@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from user_profile.models import User, Following,FriendRequest, Friends, Notification, NotificationBridge
-from news.models import Post,Like,Comment
-from news.forms import NewCommentForm
+from news.models import Post,Like,Comment, SharedPost
+
 # Create your views here.
 
 #processes a follow request, will also account for unfollowing soon
@@ -259,4 +259,14 @@ def deleteComment(request):
         Comment.objects.filter(originPost= post, user = user, message=message).delete()
         data={'message':'deleted'}
 
+    return JsonResponse(data)
+
+def shareToFriends(request):
+    data ={}
+    ogPost = Post.objects.get(id=request.GET.get('postID'))
+    user = request.user
+    message = request.GET.get('message')
+    if ogPost:
+        SharedPost.objects.create(user=user, originPost = ogPost, description= message)
+        data = {'message':'shared'}
     return JsonResponse(data)

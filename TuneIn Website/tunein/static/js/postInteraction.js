@@ -42,7 +42,6 @@ function isLiked(id){
         success: function (data) {
             var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
             if (data.liked) {
-                createPopup('post liked');
                 $row.html("<button onclick='unlikePost("+id+")' id='likeButton'>💘Liked</button>");
             } else{
                 $row.html("<button onclick='likePost("+id+")'id='likeButton'>❤Like</button>");
@@ -154,6 +153,49 @@ function deleteComment(id, message){
                 $("#cc_"+id).remove();
                 showCommentPopup(id);
             }
+        }
+    });
+
+}
+function prepForSharing(id){
+    if($("#sc_"+id).length){
+        //dont open, comment box is already open
+    }
+    else{
+        var container  = document.createElement('DIV');
+        container.classList.add('comment-Container');//its not for comments but it still works
+        $(container).attr('id', 'sc_'+id);
+        var close = document.createElement('button');
+        close.innerHTML='X';
+        close.onclick = function(){$(container).remove();}
+        var title = document.createElement('h3');
+        title.innerHTML='Share to friends:';
+        $(container).append(close);
+        $(container).append(title);
+
+        var commentField = document.createElement('TEXTAREA');
+        $(commentField).attr('id', 'sf_'+id);
+        var formbutton = document.createElement('button');
+        formbutton.innerText = 'Post';
+        formbutton.onclick = function(){shareToFriends(id);};
+        
+        $(container).append(commentField);
+        $(container).append(formbutton);
+        $("#"+id).prepend(container);
+        window.location.hash = "#sc_"+id;
+    }
+}
+function shareToFriends(id){
+    $.ajax({
+        url: appurl+'shareToFriends',
+        data:{
+            'postID':id,
+            'message':$("#sf_"+id).val()
+        },
+        dataType: 'json',
+        success:function (data){
+            $("#sc_"+id).remove();
+            
         }
     });
 
