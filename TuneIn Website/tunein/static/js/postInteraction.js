@@ -9,7 +9,7 @@ function likePost(id){
             if (data.message) {
                 createPopup('post liked');
                 var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
-                $row.html("<button onclick='unlikePost("+id+")' id='likeButton'>💘Liked</button>");
+                $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘</span><span class='btn-text'>Liked</span></button>");
             }
         }
     });
@@ -26,7 +26,7 @@ function unlikePost(id){
             if (data.message) {
                 createPopup('post liked');
                 var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
-                $row.html("<button onclick='likePost("+id+")'id='likeButton'>❤Like</button>");
+                $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤</span><span class='btn-text'>Like</span></button>");
             }
         }
     });
@@ -42,9 +42,9 @@ function isLiked(id){
         success: function (data) {
             var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
             if (data.liked) {
-                $row.html("<button onclick='unlikePost("+id+")' id='likeButton'>💘Liked</button>");
+                $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘</span><span class='btn-text'>Liked</span></button>");
             } else{
-                $row.html("<button onclick='likePost("+id+")'id='likeButton'>❤Like</button>");
+                $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤</span><span class='btn-text'>Like</span></button>");
             }
         }
     });

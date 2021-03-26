@@ -1,99 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/news.css' %}">
 <script src="{%static 'js/postInteraction.js' %}"></script>
-<!-- Inline style -->
-<style>
 
-    body{
-    margin:0;
-    background-color: #222132;
-    color:white;
-    font-family: 'Open Sans', sans-serif;
-}
-
-.posts{
-    align-content: center;
-    position: relative;
-    width:80%;
-    height:auto;
-    margin-left: auto;
-    margin-right: auto;
-}
-.post{
-    margin-top:5%;
-    margin-bottom: 5%;;
-    text-align: center;
-    background-color: #333656;
-    display: flex;
-    flex-wrap: nowrap;
-    border-radius: 25px;
-    box-shadow: 5px 5px 5px #1A1B2F;
-    flex-direction: column;
-}
-.post_header{
-    margin-top:2%;
-    margin-left:2%;
-    flex: 0 3 50px;
-    width: 100%;
-    text-align: left;
-}
-
-.post_icon{
-    display:inline;
-    height:50px;
-    max-width: 100%;
-    max-height: 100%;
-    vertical-align: middle;
-    border-radius: 100%;
-}
-.post_username{
-    text-decoration:none;
-    color: white;
-    font-weight: bold;
-}
-.date{
-    font-weight: lighter;
-}
-.post_content{
-    flex: 0 3 100px;
-    margin:2%;
-    margin-bottom:0%;
-    border-radius: 25px;
-    background-color: #89899E;
-}
-.post_text{
-    margin:2%;
-    margin-top: 0%;
-    text-align: left;
-    font-size: 14px;
-}
-.post_interactables{
-    display: flex;
-    justify-content:space-evenly;
-    margin:2%;
-}
-
-.post_icon{
-    display:iline;
-    height:50px;
-    max-width: 100%;
-    max-height: 100%;
-    vertical-align: middle;
-    border-radius: 100%;
-}
-
-.comment-Container{
-    background-color: #1A1B2F;
-    border-radius: 25px;
-    position: absolute;
-    width:90%;
-    margin:5%;
-    align-content: center;
-}
-
-
-</style>
 
 <!-- HTML Layout for posts on the news page -->
 <div class="posts">
@@ -122,9 +32,18 @@
         </div>
         <div class="post_interactables">
             <!-- these arent errors, dont treat them as such-->
-            <div><button onclick='likePost({{post.id}})' id='likeButton'>❤Like</button></div>
-            <div><button onclick='showCommentPopup({{post.id}})'>💬Comment</button></div>
-            <div><button onclick='prepForSharing({{post.id}})'>📩Share</button></div>
+            <div><button class="btn" onclick='likePost({{post.id}})' id='likeButton'>
+            <span class="btn-icon">❤</span>
+            <span class="btn-text">Like</span>
+            </button></div>
+            <div><button class="btn" onclick='showCommentPopup({{post.id}})'>
+            <span class="btn-icon">💬</span>
+            <span class="btn-text">Comment</span>
+            </button></div>
+            <div><button class="btn" onclick='prepForSharing({{post.id}})'>
+            <span class="btn-icon">📩</span>
+            <span class="btn-text">Share</span>
+            </button></div>
         </div>
     </div>
 <script>
