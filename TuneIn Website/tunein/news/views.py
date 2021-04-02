@@ -8,6 +8,7 @@ from news.forms import NewPostForm, NewCommentForm
 from news.models import Post, Comment, Like,SharedPost
 from datetime import datetime
 from operator import itemgetter
+import operator
 # Create your views here.
 #I went through and added comments, feel free to modify them 
 #-Felix
@@ -40,15 +41,21 @@ def feed(request):
             posts = Post.objects.filter(user_name__in=following_list)
             sharedPosts = SharedPost.objects.filter(user__in=following_list)
             sharedPosts = sharedPosts.order_by('-date_posted')
-
         else:
             posts = Post.objects.all()
+
         posts = posts.order_by('-date_posted')
         artist = request.user.groups.filter(name='artists').exists()
 
         if SharedPost.objects.filter(user__in=following_list):
-            test = {'posts': posts, 'artist': artist}
-            print('user has shared posts that they can"t see yet :(')
+            print(sharedPosts)
+            l_posts = list(posts)
+            l_shared = list(sharedPosts)
+            l_posts.extend(l_shared)
+            print(l_posts)
+            all_posts = sorted(l_posts,key=lambda x: x.get_date(),reverse=True)
+            print(all_posts)
+            test = {'posts': all_posts, 'artist': artist}
         else:
             test = {'posts': posts, 'artist': artist}
         return render(request, 'news.html', test)
