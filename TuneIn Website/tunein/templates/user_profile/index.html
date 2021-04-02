@@ -26,24 +26,11 @@
                 <script type="text/javascript">
                         if("{{artist}}" == "True"){
                             var a = parseInt("{{followers}}");
-                            console.log(a);
-                            if(a < 1000){
-                                document.getElementById("followers").innerHTML =a;
-                            } else if(a > 1000 && a < 1000000){
-                                document.getElementById("followers").innerHTML = (a/1000).toPrecision(2) + "K";
-                            } else if(a> 1000000){
-                                document.getElementById("followers").innerText = (a/1000000).toPrecision(2) + "M";
-                            }
+                            document.getElementById("followers").innerHTML = numToStr(a);
                         }
                         var a = parseInt("{{following}}");
                         console.log(a);
-                        if(a < 1000){
-                            document.getElementById("following").innerHTML =a;
-                        } else if(a > 1000 && a < 1000000){
-                            document.getElementById("following").innerHTML = (a/1000).toPrecision(2) + "K";
-                        } else if(a> 1000000){
-                            document.getElementById("following").innerText = (a/1000000).toPrecision(2) + "M";
-                        }
+                        document.getElementById("following").innerHTML = numToStr(a);
 
 
 
@@ -74,6 +61,72 @@
             {% if user %}
             {% if artist %}
             {% for post in posts %}
+
+            {% if post.originPost %}
+<div class="post" id="{{post.id}}">
+    <div class="post_header">
+        <img class ="post_icon" src="{{post.user.profile.photo.url }}">
+        <a class="post_username" href="{% url 'user_profile' %}?username={{post.user}}">{{post.user}}</a> Shared a post
+        <p id="date">{{post.date_posted}}</p>
+    </div>
+    <div class="post_text">
+        <p>
+
+               {{post.description}}
+
+        </p>
+    </div>
+    <div class="post_content">
+    <!-- original source post goes here -->
+
+    <div class="post" id="{{post.originPost.id}}">
+        <div class="post_header">
+            <img class ="post_icon" src="{{post.originPost.user_name.profile.photo.url }}">
+            <a class="post_username" href="{% url 'user_profile' %}?username={{post.originPost.user_name}}">{{post.originPost.user_name}}</a>
+            <p id="date">{{post.originPost.date_posted}}</p>
+        </div>
+
+        <div class="post_content">
+            <img src="{{post.originPost.pic.url}}">
+
+
+        </div>
+        <div class="post_text">
+            <p>
+
+                   {{post.originPost.description}}
+
+            </p>
+        </div>
+        <div class="post_interactables">
+            <!-- these arent errors, dont treat them as such-->
+            <div>
+                <button class="btn" onclick='likePost({{post.originPost.id}})' id='likeButton'>
+            <span class="btn-icon">❤</span>
+            <span class="btn-text">Like</span>
+            </button></div>
+            <div><button class="btn" onclick='showCommentPopup({{post.originPost.id}})'>
+            <span class="btn-icon">💬</span>
+            <span class="btn-text">Comment</span>
+            </button></div>
+            <div><button class="btn" onclick='prepForSharing({{post.originPost.id}})'>
+            <span class="btn-icon">📩</span>
+            <span class="btn-text">Share</span>
+            </button></div>
+        </div>
+    </div>
+<script>
+    isLiked({{post.originPost.id}});
+</script>
+
+
+    </div>
+    
+    
+</div>
+
+<!-- this section is for non shared posts, just the regular ones-->
+ {%else%}
             <div class="post" id="{{post.id}}">
                 <div class="post_header">
                     <img class="post_icon" src="{{user.profile.photo.url }}">
@@ -116,6 +169,7 @@
 
 
             </script>
+            {%endif%}
             {% endfor %}
             {% endif %}
             {% endif %}

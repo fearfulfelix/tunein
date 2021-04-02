@@ -57,7 +57,7 @@
                 $(notification).append(deny);
                 $("#notifications_go_here").append(notification);
             break;
-
+        
         }
     }
     function checkForNotifs(){
@@ -213,6 +213,9 @@
             </li>
             <!-- Links to other pages on the site -->
             <div class="links">
+                {%if artist %}
+                <li><a href="{% url 'createPost' %}">✉Create a post</a></li>
+                {%endif%}
                 <li><a href="{% url 'user_profile' %}">🏠Profile</a></li>
                 <li><a href="{% url 'feed' %}">🎶Feed</a></li>
                 <li> 

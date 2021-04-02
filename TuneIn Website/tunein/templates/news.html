@@ -22,10 +22,16 @@ things that need to be changed/ added:
 <div class="post" id="{{post.id}}">
     <div class="post_header">
         <img class ="post_icon" src="{{post.user.profile.photo.url }}">
-        <a class="post_username" href="{% url 'user_profile' %}?username={{post.user}}">{{post.user}}</a>
+        <a class="post_username" href="{% url 'user_profile' %}?username={{post.user}}">{{post.user}}</a> Shared a post
         <p id="date">{{post.date_posted}}</p>
     </div>
+    <div class="post_text">
+        <p>
 
+               {{post.description}}
+
+        </p>
+    </div>
     <div class="post_content">
     <!-- original source post goes here -->
 
@@ -70,32 +76,10 @@ things that need to be changed/ added:
 
 
     </div>
-    <div class="post_text">
-        <p>
-
-               {{post.description}}
-
-        </p>
-    </div>
-    <div class="post_interactables">
-        <!-- these arent errors, dont treat them as such-->
-        <div><button class="btn" onclick='likePost({{post.id}})' id='likeButton'>
-        <span class="btn-icon">❤</span>
-        <span class="btn-text">Like</span>
-        </button></div>
-        <div><button class="btn" onclick='showCommentPopup({{post.id}})'>
-        <span class="btn-icon">💬</span>
-        <span class="btn-text">Comment</span>
-        </button></div>
-        <div><button class="btn" onclick='prepForSharing({{post.id}})'>
-        <span class="btn-icon">📩</span>
-        <span class="btn-text">Share</span>
-        </button></div>
-    </div>
+    
+    
 </div>
-<script>
-isLiked({{post.id}});
-</script>
+
 <!-- this section is for non shared posts, just the regular ones-->
  {%else%}
 

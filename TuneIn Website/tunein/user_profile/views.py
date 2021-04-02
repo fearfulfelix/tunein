@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.template import loader
 from .models import User, Following,FriendRequest, Friends
-from news.models import Post
+from news.models import Post, SharedPost
 # Create your views here.
 
 #profile page
@@ -22,6 +22,16 @@ def index(request):
                 posts = posts.order_by('-date_posted')
                 for post in posts:
                     print(post)
+            sharedPosts = SharedPost.objects.filter(user=sample_user)
+            if sharedPosts:
+                sharedPosts = sharedPosts.order_by('-date_posted')
+                l_posts = list(posts)
+                l_shared = list(sharedPosts)
+                l_posts.extend(l_shared)
+                print(l_posts)
+                all_posts = sorted(l_posts,key=lambda x: x.get_date(),reverse=True)
+                print(all_posts)
+                posts = all_posts
             following = Following.objects.filter(follower= sample_user).count()
             con = {'user': sample_user,
             'artist': artist,
@@ -42,6 +52,16 @@ def index(request):
                 posts = posts.order_by('-date_posted')
                 for post in posts:
                     print(post)
+            sharedPosts = SharedPost.objects.filter(user=sample_user)
+            if sharedPosts:
+                sharedPosts = sharedPosts.order_by('-date_posted')
+                l_posts = list(posts)
+                l_shared = list(sharedPosts)
+                l_posts.extend(l_shared)
+                print(l_posts)
+                all_posts = sorted(l_posts,key=lambda x: x.get_date(),reverse=True)
+                print(all_posts)
+                posts = all_posts
             following = Following.objects.filter(follower= request.user).count()
             con = {'user': sample_user,
             'artist': artist,

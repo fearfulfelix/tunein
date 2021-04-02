@@ -5,10 +5,12 @@ from news.models import Post,Like,Comment, SharedPost
 
 # Create your views here.
 
-#processes a follow request, will also account for unfollowing soon
-#users also cant follow themselves because thats dumb.
+#ignore me, but dont remove me because I am holding everything together by a thread
 def root(request):
     return null
+#processes a follow request, will also account for unfollowing soon
+#users also cant follow themselves because thats dumb.
+
 def follow_user(request):
     target = User.objects.get(username= request.GET.get('target'))
     follower = request.user
@@ -191,24 +193,32 @@ def likePost(request):
     data={}
     post = Post.objects.get(id=request.GET.get('postID'))
     if post:
+        message = ""
         alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
         if alreadyLiked:
-            data={'message':'already Liked'}
+            message = 'already Liked'
         else:
             like = Like.objects.create(originPost=post, user = request.user)
-            data={'message':'post liked'}
+            message = 'post liked'
+        likesNum = Like.objects.filter(originPost=post).count()
+        
+        data={'message':message, "likes":likesNum}
     return JsonResponse(data)
 
 def unlikePost(request):
     data={}
     post = Post.objects.get(id=request.GET.get('postID'))
     if post:
+        message =""
         alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
         if alreadyLiked:
             alreadyLiked.delete()
-            data={'message':'Unliked'}
+            message = 'post unliked'
         else:
-            data={'message':'post was never liked'}
+            message = 'post was never liked'
+        likesNum = Like.objects.filter(originPost=post).count()
+        
+        data={'message':message, "likes":likesNum}
     return JsonResponse(data)
     
 def isLiked(request):
@@ -216,10 +226,11 @@ def isLiked(request):
     post = Post.objects.get(id=request.GET.get('postID'))
     if post:
         alreadyLiked = Like.objects.filter(originPost=post, user = request.user)
+        likesNum = Like.objects.filter(originPost=post).count()
         if alreadyLiked:
-            data={'liked':True}
+            data={'liked':True, "likes":likesNum}
         else:
-            data={'liked':False}
+            data={'liked':False, "likes":likesNum}
     return JsonResponse(data)
 
 def getComments(request):
@@ -244,8 +255,10 @@ def postComment(request):
     user = request.user
     post = Post.objects.get(id=request.GET.get('postID'))
     if post:
-        Comment.objects.create(originPost=post, user=user, message=message)
+        c = Comment.objects.create(originPost=post, user=user, message=message)
         #send notif to origin user plz
+        bridge = NotificationBridge.objects.create(notificationType='Comment', comment = c)
+        newNotif = Notification.objects.create(source=bridge, receiver=post.user_name)
         data = {'message':'posted'}
 
     return JsonResponse(data)

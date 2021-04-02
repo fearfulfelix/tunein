@@ -8,8 +8,10 @@ function likePost(id){
         success: function (data) {
             if (data.message) {
                 createPopup('post liked');
+                var likes = numToStr(data.likes);
+
                 var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
-                $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘</span><span class='btn-text'>Liked</span></button>");
+                $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘"+likes+"</span><span class='btn-text'>Liked</span></button>");
             }
         }
     });
@@ -25,8 +27,10 @@ function unlikePost(id){
         success: function (data) {
             if (data.message) {
                 createPopup('post liked');
+                var likes = numToStr(data.likes);
+
                 var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
-                $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤</span><span class='btn-text'>Like</span></button>");
+                $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤"+likes+"</span><span class='btn-text'>Like</span></button>");
             }
         }
     });
@@ -41,10 +45,11 @@ function isLiked(id){
         dataType: 'json',
         success: function (data) {
             var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
+            var likes = numToStr(data.likes);
             if (data.liked) {
-                $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘</span><span class='btn-text'>Liked</span></button>");
+                $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘"+likes+"</span><span class='btn-text'>Liked</span></button>");
             } else{
-                $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤</span><span class='btn-text'>Like</span></button>");
+                $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤"+likes+"</span><span class='btn-text'>Like</span></button>");
             }
         }
     });
@@ -52,17 +57,16 @@ function isLiked(id){
 
 function showCommentPopup(id){
     if($("#cc_"+id).length){
-        //dont open, comment box is already open
+        //closes comment area
+        $("#cc_"+id).remove();
     }
     else{
         var container = document.createElement('DIV');
-        container.classList.add('comment-Container');
         $(container).attr('id', 'cc_'+id);
         
         var title = document.createElement('h3');
         title.innerHTML='Comments:';
-        var close = document.createElement('button');
-        close.innerHTML='X';
+        $(container).append(title);
         var comments = document.createElement('DIV');
         $.ajax({
             url: appurl+'getComments',
@@ -72,14 +76,12 @@ function showCommentPopup(id){
             dataType: 'json',
             success: function (data) {
                 if(data.amount >0){
-                    console.log(data.amount);
                     for(var i = 0; i< data.amount;i++){
                         var comment = document.createElement('DIV');
                         var username = document.createElement('b');
                         username.innerText = data.comments[i].user +': ';
                         var message = document.createElement('span');
                         message.innerText = data.comments[i].message;
-                        console.log(data.comments[i].message);
                         $(comment).append(username);
                         $(comment).append(message);
                         $(comments).append(comment);
@@ -93,15 +95,9 @@ function showCommentPopup(id){
                         }
                     }
                 }
-                else{
-                    $(container).append('no comments!');
-                    
-                }
             }
         });
-        close.onclick = function(){$(container).remove();}
-        $(container).append(close);
-        $(container).append(title);
+       
         
         $(container).append(comments);
         
@@ -113,8 +109,7 @@ function showCommentPopup(id){
         formbutton.onclick = function(){postComment(id);};
         $(container).append(commentField);
         $(container).append(formbutton);
-        $("#"+id).prepend(container);
-        window.location.hash = "#cc_"+id;
+        $("#"+id).append(container);
     }
 }
 function postComment(id){
@@ -199,4 +194,17 @@ function shareToFriends(id){
         }
     });
 
+}
+function numToStr(x){
+    var xStr = "";
+
+    if(x < 1000){
+        xStr = x;
+    } else if(x > 1000 && x < 1000000){
+        xStr = (x/1000).toPrecision(2) + "K";
+    } else if(x> 1000000){
+        xStr = (x/1000000).toPrecision(2) + "M";
+    }
+
+    return xStr;
 }

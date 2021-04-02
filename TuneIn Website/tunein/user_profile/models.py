@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime
+from news.models import Comment,SharedPost
 
 
 # Create your models here.
@@ -70,6 +71,8 @@ class NotificationBridge(models.Model):
     friendRequest = models.OneToOneField(FriendRequest, on_delete=models.CASCADE, null=True)
     following = models.OneToOneField(Following, on_delete=models.CASCADE, null=True)
     friend = models.OneToOneField(Friends, on_delete=models.CASCADE, null=True)
+    comment = models.OneToOneField(Comment, on_delete=models.CASCADE, null=True)
+    share = models.OneToOneField(SharedPost, on_delete=models.CASCADE, null=True)
     #add more for each other notification type
 
 class Notification(models.Model):

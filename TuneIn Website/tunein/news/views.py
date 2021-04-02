@@ -9,6 +9,7 @@ from news.models import Post, Comment, Like,SharedPost
 from datetime import datetime
 from operator import itemgetter
 import operator
+from django.contrib.auth.models import Group
 # Create your views here.
 #I went through and added comments, feel free to modify them 
 #-Felix
@@ -43,11 +44,21 @@ def feed(request):
             sharedPosts = sharedPosts.order_by('-date_posted')
         else:
             posts = Post.objects.all()
-
         posts = posts.order_by('-date_posted')
         artist = request.user.groups.filter(name='artists').exists()
 
-        if SharedPost.objects.filter(user__in=following_list):
+        friends_a = Friends.objects.filter(user= request.user)
+        friends_b = Friends.objects.filter(friend= request.user)
+        friends_list = []
+        for f in friends_a:
+            friends_list.append(getattr(f,'friend'))
+        for f in friends_b:
+            friends_list.append(getattr(f,'user'))
+        friends_sharedPosts =SharedPost.objects.filter(user__in= friends_list)
+        if friends_sharedPosts:
+            print(friends_sharedPosts)
+        
+        if sharedPosts:
             print(sharedPosts)
             l_posts = list(posts)
             l_shared = list(sharedPosts)
@@ -58,6 +69,16 @@ def feed(request):
             test = {'posts': all_posts, 'artist': artist}
         else:
             test = {'posts': posts, 'artist': artist}
+        
+        if sharedPosts and friends_sharedPosts:
+            print("cum")
+            l_f_sp = list(friends_sharedPosts)
+            all_posts.extend(l_f_sp)
+            print(all_posts)
+            all_posts = list(set(sorted(all_posts,key=lambda x: x.get_date(),reverse=True)))
+            print(all_posts)
+            test = {'posts': all_posts, 'artist': artist}
+
         return render(request, 'news.html', test)
     else:
         return HttpResponseRedirect('/') 
@@ -176,11 +197,18 @@ def processProfile(request):
                 last = cleanProfile['last_name']
                 bio = cleanProfile['bio']
                 img = cleanProfile['profilePicture']
+                Artist = cleanProfile['artist']
                 request.user.profile.first_name = first
                 request.user.profile.last_name = last
                 request.user.profile.bio = bio
                 request.user.profile.photo = img
                 request.user.profile.save()
+                if Artist:
+                    artist_group = Group.objects.get(name='artists') 
+                    artist_group.user_set.add(request.user)
+                else:
+                    fan_group = Group.objects.get(name='fans') 
+                    fan_group.user_set.add(request.user)
     return HttpResponseRedirect('feed')
 
 
