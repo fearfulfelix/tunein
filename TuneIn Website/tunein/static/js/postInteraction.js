@@ -78,16 +78,21 @@ function showCommentPopup(id){
                 if(data.amount >0){
                     for(var i = 0; i< data.amount;i++){
                         var comment = document.createElement('DIV');
+
+                        comment.classList.add('comments')
+                        comment.classList.add('comments:hover')
                         var username = document.createElement('b');
                         username.innerText = data.comments[i].user +': ';
                         var message = document.createElement('span');
-                        message.innerText = data.comments[i].message;
+                        message.innerText = data.comments[i].message + '  ';
                         $(comment).append(username);
                         $(comment).append(message);
                         $(comments).append(comment);
                         if(data.comments[i].isUser){
                             var delButton = document.createElement('BUTTON');
-                            delButton.innerText = 'X';
+                            delButton.classList.add('commentDelButton')
+                            delButton.classList.add('commentDelButton:hover')
+                            delButton.innerText = 'x';
                             delButton.onclick = function(){
                                 deleteComment(id,message.innerText);
                             }

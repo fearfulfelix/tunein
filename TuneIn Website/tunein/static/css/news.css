@@ -8,7 +8,7 @@
 .posts{
     align-content: center;
     position: relative;
-    width:80%;
+    width:60%;
     height:auto;
     margin-left: auto;
     margin-right: auto;
@@ -124,4 +124,40 @@
 .btn:hover .btn-text {
   max-width: 300px;
   color: white;
+}
+
+.comments {
+position: relative;
+transition-duration: 0.4s;
+max-width: 300px;
+height: auto;
+margin: auto;
+margin-bottom: 15px;
+padding: 5px;
+background-color:
+#1A1B2F;
+border-radius:
+3px;
+border: 5px solid #89899E;
+
+}
+
+.commentDelButton:hover {
+  background-color: #89899E;
+  color: white;
+}
+
+.commentDelButton{
+position:absolute;
+top:0;
+right:0;
+background-color: red;
+border: none;
+color: white;
+padding: 2px 5px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+
 }

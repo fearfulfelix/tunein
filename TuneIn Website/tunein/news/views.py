@@ -33,6 +33,7 @@ def add(request):
 
 #the feed, essentially the users homepage.
 def feed(request):
+    sharedPosts = False
     if request.user.is_authenticated:
         following = Following.objects.filter(follower= request.user)
         following_list = []
