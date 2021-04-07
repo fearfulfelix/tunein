@@ -4,7 +4,11 @@
     color:white;
     font-family: 'Open Sans', sans-serif;
 }
-
+audio {
+    filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
+    width: 500px;
+    height: 25px;
+}
 .posts{
     align-content: center;
     position: relative;

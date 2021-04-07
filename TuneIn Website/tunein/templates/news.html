@@ -34,7 +34,6 @@ things that need to be changed/ added:
     </div>
     <div class="post_content">
     <!-- original source post goes here -->
-
     <div class="post" id="{{post.originPost.id}}">
         <div class="post_header">
             <img class ="post_icon" src="{{post.originPost.user_name.profile.photo.url }}">
@@ -44,7 +43,15 @@ things that need to be changed/ added:
 
         <div class="post_content">
             <img src="{{post.originPost.pic}}">
-
+            {% if post.choose_file %}
+                <video id = "post_vid" width = "850" height = "500" controls>
+                    <source src = "{{post.choose_file}}" type ="video/mp4" />
+                    Your browser does not support the <video> element.
+                </video>                  
+                <audio id = "post_audio" src = "{{post.choose_file}}" controls>
+                    Your browser does not support the <audio> element.   
+                </audio>                                                                  
+                {% endif %}
 
         </div>
         <div class="post_text">
@@ -92,7 +99,15 @@ things that need to be changed/ added:
 
         <div class="post_content">
             <img src="{{post.pic}}">
-
+            {% if post.choose_file %}
+                <video id = "post_vid" width = "850" height = "500" controls>
+                    <source src = "{{post.choose_file}}" type ="video/mp4" />
+                    Your browser does not support the <video> element.
+                </video>                  
+                <audio id = "post_audio" src = "{{post.choose_file}}" controls>
+                    Your browser does not support the <audio> element.   
+                </audio>                                                                  
+                {% endif %}
 
         </div>
         <div class="post_text">
