@@ -247,12 +247,16 @@ def processPost(request):
         if request.method== 'POST':
             p = NewPostForm(request.POST, request.FILES)
             print(p)
-            if p.is_valid:
-                print("valid")
-                obj = p.save(commit=False)
-                obj.user_name = request.user
-                obj.save()
-                print("created!")
+            try:
+                if p.is_valid:
+                    print("valid")
+                    obj = p.save(commit=False)
+                    obj.user_name = request.user
+                    obj.save()
+                    print("created!")
+                    return HttpResponseRedirect('feed')
+            except ValueError:
+               return HttpResponseRedirect('createPost')        
 
-    return HttpResponseRedirect('feed')
+
 
