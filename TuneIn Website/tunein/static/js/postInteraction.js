@@ -93,9 +93,8 @@ function showCommentPopup(id){
                             delButton.classList.add('commentDelButton:hover');
                             delButton.innerText = 'x';
                             delButton.onclick = function(){
-                                deleteComment(id,message.innerText);
+                                deleteComment(id,element.id);
                             }
-                            console.log("ID: " + id + " message: "+message.innerText +" pos: "+i);
                             $(comment).append(delButton);
                         }
                     });
@@ -139,19 +138,19 @@ function postComment(id){
     
 }
 
-function deleteComment(id, message){
+function deleteComment(p,id){
     $.ajax({
         url: appurl+'deleteComment',
         data: {
-            'postID': id,
-            'message': message,
+            'c_id': id
         },
         dataType: 'json',
         success: function (data) {
             if (data.message) {
                 createPopup('comment removed');
-                $("#cc_"+id).remove();
-                showCommentPopup(id);
+                
+                showCommentPopup(p);
+                showCommentPopup(p);
             }
         }
     });

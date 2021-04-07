@@ -236,14 +236,14 @@ def isLiked(request):
 def getComments(request):
     comments=[]
     amountOfComments = 0
+    print(request.GET.get('postID'))
     post = Post.objects.get(id=request.GET.get('postID'))
     if post:
         postComments = Comment.objects.filter(originPost=post)
         if postComments:
             amountOfComments = Comment.objects.filter(originPost=post).count()
             for c in postComments:
-
-                commentInfo = {'user':getattr(getattr(c,'user'),'username'), 'message': getattr(c,'message'),'isUser':getattr(c,'user') == request.user}
+                commentInfo = {'id':getattr(c,'id'), 'user':getattr(getattr(c,'user'),'username'), 'message': getattr(c,'message'),'isUser':getattr(c,'user') == request.user}
                 comments.append(commentInfo)
         data={'comments':comments, 'amount': amountOfComments} 
     return JsonResponse(data)
@@ -265,12 +265,14 @@ def postComment(request):
 
 def deleteComment(request):
     data = {}
-    message = request.GET.get('message')
+    c_id= request.GET.get('c_id')
     user= request.user
-    post = Post.objects.get(id=request.GET.get('postID'))
-    if post:
-        Comment.objects.filter(originPost= post, user = user, message=message).delete()
+    c = Comment.objects.get(user= user, id= c_id)
+    if c:
+        c.delete()
         data={'message':'deleted'}
+    else:
+        data={'message':'not deleted'}
     print(data)
     return JsonResponse(data)
 
