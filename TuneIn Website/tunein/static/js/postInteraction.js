@@ -76,29 +76,29 @@ function showCommentPopup(id){
             dataType: 'json',
             success: function (data) {
                 if(data.amount >0){
-                    for(var i = 0; i< data.amount;i++){
+                    data.comments.forEach(element => {
                         var comment = document.createElement('DIV');
-
-                        comment.classList.add('comments')
-                        comment.classList.add('comments:hover')
+                        comment.classList.add('comments');
+                        comment.classList.add('comments:hover');
                         var username = document.createElement('b');
-                        username.innerText = data.comments[i].user +': ';
+                        username.innerText = element.user +': ';
                         var message = document.createElement('span');
-                        message.innerText = data.comments[i].message + '  ';
+                        message.innerText = element.message;  
                         $(comment).append(username);
                         $(comment).append(message);
                         $(comments).append(comment);
-                        if(data.comments[i].isUser){
+                        if(element.isUser){
                             var delButton = document.createElement('BUTTON');
-                            delButton.classList.add('commentDelButton')
-                            delButton.classList.add('commentDelButton:hover')
+                            delButton.classList.add('commentDelButton');
+                            delButton.classList.add('commentDelButton:hover');
                             delButton.innerText = 'x';
                             delButton.onclick = function(){
                                 deleteComment(id,message.innerText);
                             }
+                            console.log("ID: " + id + " message: "+message.innerText +" pos: "+i);
                             $(comment).append(delButton);
                         }
-                    }
+                    });
                 }
             }
         });

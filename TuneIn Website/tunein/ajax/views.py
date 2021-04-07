@@ -271,7 +271,7 @@ def deleteComment(request):
     if post:
         Comment.objects.filter(originPost= post, user = user, message=message).delete()
         data={'message':'deleted'}
-
+    print(data)
     return JsonResponse(data)
 
 def shareToFriends(request):
