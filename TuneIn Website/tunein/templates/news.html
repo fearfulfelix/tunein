@@ -4,13 +4,18 @@
 <!-- Inline style -->
 <style>
 
-    body{
+body{
     margin:0;
     background-color: #222132;
     color:white;
     font-family: 'Open Sans', sans-serif;
 }
 
+audio {
+    filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
+    width: 500px;
+    height: 25px;
+}
 .posts{
     align-content: center;
     position: relative;
@@ -98,15 +103,22 @@
             <p id="date">{{post.date_posted}}</p>
         </div>
 
-        <div class="post_content">
-            <img src="{{post.pic}}">
-
-
+        <div class="post_content"> 
+                <img id = "post_img" src="{{post.pic}}">
+                {% if post.choose_file %}
+                <video id = "post_vid" width = "850" height = "500" controls>
+                    <source src = "{{post.choose_file}}" type ="video/mp4" />
+                    Your browser does not support the <video> element.
+                </video>                  
+                <audio id = "post_audio" src = "{{post.choose_file}}" controls>
+                    Your browser does not support the <audio> element.   
+                </audio>                                                                  
+                {% endif %}
         </div>
         <div class="post_text">
             <p>
 
-                   {{post.description}}
+                {{post.description}}
 
             </p>
         </div>
@@ -120,6 +132,7 @@
     </div>
 </div>
 {% endfor %}
+
 
 <!--<script>
 

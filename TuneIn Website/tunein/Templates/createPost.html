@@ -46,8 +46,7 @@
         <form action="{% url 'processPost' %}", method="post" enctype='multipart/form-data'>
             {% csrf_token %}
             {{postForm.as_p}}
-            <input type="submit" value="Submit">
-            
+            <input type="submit" value="Submit">            
         </form>
         </div>
     </div>

@@ -201,6 +201,8 @@ def processPost(request):
                 obj.user_name = request.user
                 obj.save()
                 print("created!")
+            else:
+                HttpResponseRedirect('createPost')    
 
     return HttpResponseRedirect('feed')
 
