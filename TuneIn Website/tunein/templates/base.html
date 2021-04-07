@@ -43,7 +43,7 @@
                 var notification = document.createElement("DIV");
                 notification.classList.add('notification_message');
                 var message = document.createElement("P");
-                message.innerText = 'You recieved a friend request from: ' + value['from'];
+                message.innerText = 'You received a friend request from: ' + value['from'];
                 var accept = document.createElement("BUTTON");
                 accept.classList.add("button");
                 accept.innerHTML = "Accept";
@@ -214,7 +214,7 @@
             <!-- Links to other pages on the site -->
             <div class="links">
                 {%if artist %}
-                <li><a href="{% url 'createPost' %}">✉Create a post</a></li>
+                <li><a href="{% url 'createPost' %}">✉Create Post</a></li>
                 {%endif%}
                 <li><a href="{% url 'user_profile' %}">🏠Profile</a></li>
                 <li><a href="{% url 'feed' %}">🎶Feed</a></li>

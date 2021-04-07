@@ -77,7 +77,7 @@ body{
 }
 input[type=text], input[type=password], input[type=email] {
     width: 70%;
-    padding: 12px 20px;
+    padding: 12px 30px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
@@ -86,10 +86,10 @@ input[type=text], input[type=password], input[type=email] {
   }
   
 input[type=submit],input[type=button] {
-    width: 40%;
+    width: 65%;
     background-color: #E08500;
     color: white;
-    padding: 14px 20px;
+    padding: 14px 33px;
     margin: 8px 0;
     border: none;
     border-radius: 4px;
