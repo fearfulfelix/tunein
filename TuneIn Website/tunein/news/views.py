@@ -72,7 +72,6 @@ def feed(request):
             test = {'posts': posts, 'artist': artist}
         
         if sharedPosts and friends_sharedPosts:
-            print("cum")
             l_f_sp = list(friends_sharedPosts)
             all_posts.extend(l_f_sp)
             print(all_posts)
