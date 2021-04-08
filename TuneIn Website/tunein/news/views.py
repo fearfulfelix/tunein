@@ -10,6 +10,10 @@ from datetime import datetime
 from operator import itemgetter
 import operator
 from django.contrib.auth.models import Group
+from PIL import Image
+from django.core.files import File
+from io import StringIO, BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 # Create your views here.
 #I went through and added comments, feel free to modify them 
 #-Felix
@@ -196,12 +200,21 @@ def processProfile(request):
                 first = cleanProfile['first_name']
                 last = cleanProfile['last_name']
                 bio = cleanProfile['bio']
-                img = cleanProfile['profilePicture']
+                img = Image.open(cleanProfile['profilePicture'])
                 Artist = cleanProfile['artist']
+
+                #image processing stuff goes here :)
+                img_width, img_height = img.size
+                c_img = img.crop(((img_width - min(img.size)) // 2, (img_height - min(img.size)) // 2, (img_width + min(img.size)) // 2, (img_height + min(img.size)) // 2))
+                c_img = c_img.resize((250,250))
+                thumb_io = BytesIO()
+                c_img.save(thumb_io, format='JPEG')
+                #thumb_file = InMemoryUploadedFile(thumb_io, None, 'foo.jpg', 'image/jpeg', thumb_io.len, None)
+                thumb_file = File(thumb_io, name=cleanProfile['profilePicture'].name)
                 request.user.profile.first_name = first
                 request.user.profile.last_name = last
                 request.user.profile.bio = bio
-                request.user.profile.photo = img
+                request.user.profile.photo = thumb_file
                 request.user.profile.save()
                 if Artist:
                     artist_group = Group.objects.get(name='artists') 
