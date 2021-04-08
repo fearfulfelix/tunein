@@ -242,35 +242,45 @@ def loginIndex(request):
 
 
 #allows users to create posts, if they're logged in and have the canpost permission(exclusive to artists)
-#P sends users to processPost upon submitting
 def createPost(request):
-    print("entered")
-    if request.user.is_authenticated and request.user.has_perm('canPost'):
-        p = NewPostForm()
-        return render(request,'createPost.html',{'postForm':p, 'user':request.user})
-    else:
-        return "You dont have permission to create posts."
-
-
-#processes posts recieved from createPost
-#authenticates the user and their permissions again(just in case)
-#then validates the form, creates a model, adds the user info, then saves
-#sends users back to the feed once complete.
-def processPost(request):
     if request.user.is_authenticated and request.user.has_perm('canPost'):
         if request.method== 'POST':
             p = NewPostForm(request.POST, request.FILES)
-            print(p)
             try:
                 if p.is_valid:
-                    print("valid")
                     obj = p.save(commit=False)
                     obj.user_name = request.user
                     obj.save()
-                    print("created!")
                     return HttpResponseRedirect('feed')
             except ValueError:
-               return HttpResponseRedirect('createPost')        
+                return render(request,'createPost.html',{'postForm':p,"message":"Error creating post, please double check your info and try again."})
+        else:
+            p = NewPostForm()
+            return render(request,'createPost.html',{'postForm':p})
+    else:
+        return "You dont have permission to create posts."
 
-
+#This shouldnt be necessary anymore, but its staying here just in case -Felix
+#
+##processes posts recieved from createPost
+##authenticates the user and their permissions again(just in case)
+##then validates the form, creates a model, adds the user info, then saves
+##sends users back to the feed once complete.
+#def processPost(request):
+#    if request.user.is_authenticated and request.user.has_perm('canPost'):
+#        if request.method== 'POST':
+#            p = NewPostForm(request.POST, request.FILES)
+#            print(p)
+#            try:
+#                if p.is_valid:
+#                    print("valid")
+#                    obj = p.save(commit=False)
+#                    obj.user_name = request.user
+#                    obj.save()
+#                    print("created!")
+#                    return HttpResponseRedirect('feed')
+#            except ValueError:
+#               return HttpResponseRedirect('createPost')        
+#
+#
 

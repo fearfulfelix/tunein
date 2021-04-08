@@ -43,12 +43,14 @@
 <div class ="content">
     <div class="posts">
         <div class="post">
-        <form action="{% url 'processPost' %}", method="post" enctype='multipart/form-data'>
+        <form action="{% url 'createPost' %}", method="post" enctype='multipart/form-data'>
             {% csrf_token %}
             {{postForm.as_p}}
             <input type="submit" value="Submit">
-            
         </form>
+        {%if message %}
+          {{message}}
+        {% endif %}
         </div>
     </div>
 </div>
