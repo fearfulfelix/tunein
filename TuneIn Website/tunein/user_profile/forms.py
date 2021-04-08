@@ -18,7 +18,7 @@ class profileForm(forms.Form):
     last_name = forms.CharField(label = 'Last Name:')
     profilePicture = forms.ImageField(label = 'Profile picture')
     bio = forms.CharField(label = 'Bio:', widget=forms.Textarea)
-    artist = forms.BooleanField(label = 'Artist:')
+    artist = forms.BooleanField(label = 'Artist:', required = False)
 
 #these are individual forms for the settings page
 

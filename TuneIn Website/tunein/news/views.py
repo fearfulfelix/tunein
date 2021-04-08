@@ -208,9 +208,10 @@ def processProfile(request):
                 c_img = img.crop(((img_width - min(img.size)) // 2, (img_height - min(img.size)) // 2, (img_width + min(img.size)) // 2, (img_height + min(img.size)) // 2))
                 c_img = c_img.resize((250,250))
                 thumb_io = BytesIO()
-                c_img.save(thumb_io, format='JPEG')
-                #thumb_file = InMemoryUploadedFile(thumb_io, None, 'foo.jpg', 'image/jpeg', thumb_io.len, None)
+                c_img.save(thumb_io, format='PNG')
                 thumb_file = File(thumb_io, name=cleanProfile['profilePicture'].name)
+                #image processing is done, model gets saved
+
                 request.user.profile.first_name = first
                 request.user.profile.last_name = last
                 request.user.profile.bio = bio
