@@ -61,7 +61,7 @@
     <div class="post">
         
         
-        <form action="{% url 'processSettings' %}", method="post">
+        <form action="{% url 'settings' %}", method="post">
             {% csrf_token %}
             {{nameForm.as_p}}
             <input type="submit"name='formType' value="Update Name">
@@ -69,7 +69,7 @@
         <!--Name  <pre>Alex O'Hare</pre> <a href><span class="edit">Edit</span></a>-->
         
         <hr>
-        <form action="{% url 'processSettings' %}", method="post">
+        <form action="{% url 'settings' %}", method="post">
             {% csrf_token %}
             {{bioForm.as_p}}
             <input type="submit" name='formType'value="Update Bio">

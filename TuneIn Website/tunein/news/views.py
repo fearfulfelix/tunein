@@ -15,11 +15,6 @@ from django.core.files import File
 from io import StringIO, BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 # Create your views here.
-#I went through and added comments, feel free to modify them 
-#-Felix
-
-#?
-
 
 def home(request):
     return render(request, 'home.html')
@@ -88,160 +83,137 @@ def feed(request):
         return HttpResponseRedirect('/') 
 
 
-#settings page, needs to be functional
+#settings page, needs more settings
 def settings(request):
     if request.user.is_authenticated:
-        name= nameForm()
-        bio = bioForm()
-        return render(request,'settings.html',{"nameForm":name, "bioForm":bio})
+        if request.method == "POST":
+            if request.POST['formType'] == 'Update Bio':
+                form = bioForm(request.POST)
+                if(form.is_valid()):
+                    newBio = form.cleaned_data['bio']
+                    request.user.profile.bio = newBio
+                    request.user.profile.save()
+            else:
+                form = nameForm(request.POST)
+                if(form.is_valid()):
+                    newFirst = form.cleaned_data['first_name']
+                    newLast = form.cleaned_data['last_name']
+                    if newFirst != "" and newLast != "":
+                        request.user.profile.first_name = newFirst
+                        request.user.profile.last_name = newLast
+                        request.user.profile.save()
+        else:
+            name= nameForm()
+            bio = bioForm()
+            return render(request,'settings.html',{"nameForm":name, "bioForm":bio})
+        return HttpResponseRedirect('feed')
     else:
         return HttpResponseRedirect('/')
 
-
-def processSettings(request):
-    if request.user.is_authenticated:
-        if request.POST['formType'] == 'update Bio':
-            form = bioForm(request.POST)
-            if(form.is_valid()):
-                newBio = form.cleaned_data['bio']
-                request.user.profile.bio = newBio
-                request.user.profile.save()
-        else:
-            form = nameForm(request.POST)
-            if(form.is_valid()):
-                newFirst = form.cleaned_data['first_name']
-                newLast = form.cleaned_data['last_name']
-                if newFirst != "" and newLast != "":
-                    request.user.profile.first_name = newFirst
-                    request.user.profile.last_name = newLast
-                    request.user.profile.save()
-
-                
-    return HttpResponseRedirect('settings')
-
-
-#processes the login form from the login page.
-#   uses the built in django authentication system to validate the provided user information
-#   needs to provide error information to users upon failed login
-#   sends user to the feed, UNLESS they haven't created a profile, in that case they go to createProfile
-def processLogin(request):
-    if request.method == 'POST':
-        print("post")
-        form = loginForm(request.POST)
-        print(form)
-
-        if form.is_valid:
-            print("valid")
-            credentials = form.cleaned_data
-            user = authenticate(username=credentials['username'],
-                                password=credentials['password'])
-            if user is not None:
-                print("not none")
-                login(request, user)
-                if user.profile.first_name == "":
-                    return HttpResponseRedirect('createProfile')
-                else:
-                    return HttpResponseRedirect('feed')
-            else:
-                print("user does not exist")
-                return HttpResponseRedirect('/')
-        else:
-            print("form error")
-            return HttpResponseRedirect('/')
-
-
-#processes the user registration form from the login page
-#   simmilar to processlogin, where it uses the built in authentication system to validate users
-#   needs to provide error information to users upon failed registration
-#   this now sends users to the profile creation page
-def processRegistration(request):
-    if request.method == 'POST':
-        print("post")
-        form = registrationForm(request.POST)
-        print(form)
-        if form.is_valid:
-            print("valid")
-            credentials = form.cleaned_data
-            username = credentials['username']
-            email = credentials['email']
-            created = User.objects.filter(email=email,username=username)
-            print(created)
-            if created:
-                print("user already exists")
-                return HttpResponseRedirect('/')
-            else:
-                user = User.objects.create_user(username=credentials['username'],
-                email=credentials['email'],
-                password=credentials['password'])
-                print(user)
-                login(request,user)
-                print("send user to profile creation page")
-                return HttpResponseRedirect('createProfile')
-    return None            
-
-
 #creates a profile to match the newly created user 
 def createProfile(request):
-    if request.user.is_authenticated and request.user.profile.first_name == "":
-        profile = profileForm()
-        return render(request,'createProfile.html',{'profileForm':profile})
+    errmsg = ""
+    if request.user.is_authenticated:
+        if request.user.profile.first_name == "":
+            if request.method== 'POST':
+                p = profileForm(request.POST, request.FILES)
+                if p.is_valid():
+                    try:
+                        cleanProfile = p.cleaned_data
+                        first = cleanProfile['first_name']
+                        last = cleanProfile['last_name']
+                        bio = cleanProfile['bio']
+                        img = Image.open(cleanProfile['profilePicture'])
+                        Artist = cleanProfile['artist']
+
+                        #image processing stuff goes here :)
+                        img_width, img_height = img.size
+                        c_img = img.crop(((img_width - min(img.size)) // 2, (img_height - min(img.size)) // 2, (img_width + min(img.size)) // 2, (img_height + min(img.size)) // 2))
+                        c_img = c_img.resize((250,250))
+                        thumb_io = BytesIO()
+                        c_img.save(thumb_io, format='PNG')
+                        thumb_file = File(thumb_io, name=cleanProfile['profilePicture'].name)
+                        #image processing is done, model gets saved
+
+                        request.user.profile.first_name = first
+                        request.user.profile.last_name = last
+                        request.user.profile.bio = bio
+                        request.user.profile.photo = thumb_file
+                        request.user.profile.save()
+                        if Artist:
+                            artist_group = Group.objects.get(name='artists') 
+                            artist_group.user_set.add(request.user)
+                        else:
+                            fan_group = Group.objects.get(name='fans') 
+                            fan_group.user_set.add(request.user)
+                        return HttpResponseRedirect('feed')
+                    except ValueError:
+                        errmsg ="something went wrong, please try again."
+                        profile = profileForm()
+                        return render(request,'createProfile.html',{'profileForm':profile,'message':errmsg})    
+            else:
+                profile = profileForm()
+                return render(request,'createProfile.html',{'profileForm':profile,'message':errmsg})
+        else:
+            return HttpResponseRedirect('feed')  
     else:
-        return HttpResponseRedirect('processProfile')
-
-
-#processes the form retrieved from createProfile
-#   Updates the user.profile model currently logged in    
-def processProfile(request):
-    if request.user.is_authenticated and request.user.profile.first_name == "":
-        if request.method== 'POST':
-            p = profileForm(request.POST, request.FILES)
-            if p.is_valid():
-                cleanProfile = p.cleaned_data
-                first = cleanProfile['first_name']
-                last = cleanProfile['last_name']
-                bio = cleanProfile['bio']
-                img = Image.open(cleanProfile['profilePicture'])
-                Artist = cleanProfile['artist']
-
-                #image processing stuff goes here :)
-                img_width, img_height = img.size
-                c_img = img.crop(((img_width - min(img.size)) // 2, (img_height - min(img.size)) // 2, (img_width + min(img.size)) // 2, (img_height + min(img.size)) // 2))
-                c_img = c_img.resize((250,250))
-                thumb_io = BytesIO()
-                c_img.save(thumb_io, format='PNG')
-                thumb_file = File(thumb_io, name=cleanProfile['profilePicture'].name)
-                #image processing is done, model gets saved
-
-                request.user.profile.first_name = first
-                request.user.profile.last_name = last
-                request.user.profile.bio = bio
-                request.user.profile.photo = thumb_file
-                request.user.profile.save()
-                if Artist:
-                    artist_group = Group.objects.get(name='artists') 
-                    artist_group.user_set.add(request.user)
-                else:
-                    fan_group = Group.objects.get(name='fans') 
-                    fan_group.user_set.add(request.user)
-    return HttpResponseRedirect('feed')
-
+        return HttpResponseRedirect('login')
 
 #logs the user out, and sends them to the login page
 def processLogout(request):
-    print("logging user out")
     logout(request)
-    print("user logged out")
     return HttpResponseRedirect('/')
 
 
-#the login page, the two forms send the user to processLogin and processRegistration
+#the login page, now with error messages :D
 def loginIndex(request):
+    #blank message
+    errmsg = ""
+    if request.method =='POST':
+        if request.POST['formType'] == 'Login':   
+            form = loginForm(request.POST)
+            if form.is_valid():
+                credentials = form.cleaned_data
+                user = authenticate(username=credentials['username'],
+                                    password=credentials['password'])
+                if user is not None:
+                    login(request, user)
+                    if user.profile.first_name == "":
+                        return HttpResponseRedirect('createProfile')
+                    else:
+                        return HttpResponseRedirect('feed')
+                else:
+                    errmsg="User not found, please try again."
+            else:
+                errmsg="User not found, please try again."
+        elif request.POST['formType'] == 'Create New Account':
+            form = registrationForm(request.POST)
+            if form.is_valid():
+                credentials = form.cleaned_data
+                username = credentials['username']
+                email = credentials['email']
+                created = User.objects.filter(email=email,username=username)
+                created2 = User.objects.filter(email=email)
+                created3 = User.objects.filter(username=username)
+
+                if created:
+                    errmsg="An account with that username or email already exists."
+                elif created2:
+                    errmsg="An account with that email already exists."
+                elif created3:
+                    errmsg="An account with that username already exists."
+                else:
+                    user = User.objects.create_user(username=credentials['username'],
+                    email=credentials['email'],
+                    password=credentials['password'])
+                    login(request,user)
+                    return HttpResponseRedirect('createProfile')
     form = loginForm()
     rform = registrationForm()
-    return render(request, 'loginpage/index.html', {'LoginForm': form,'RegistrationForm': rform})
+    return render(request, 'loginpage/index.html', {'LoginForm': form,'RegistrationForm': rform,"message":errmsg})
 
 
-#allows users to create posts, if they're logged in and have the canpost permission(exclusive to artists)
+#allows users to create posts, if they're logged in and have the canpost permission(exclusive to the artist group)
 def createPost(request):
     if request.user.is_authenticated and request.user.has_perm('canPost'):
         if request.method== 'POST':
@@ -259,28 +231,3 @@ def createPost(request):
             return render(request,'createPost.html',{'postForm':p})
     else:
         return "You dont have permission to create posts."
-
-#This shouldnt be necessary anymore, but its staying here just in case -Felix
-#
-##processes posts recieved from createPost
-##authenticates the user and their permissions again(just in case)
-##then validates the form, creates a model, adds the user info, then saves
-##sends users back to the feed once complete.
-#def processPost(request):
-#    if request.user.is_authenticated and request.user.has_perm('canPost'):
-#        if request.method== 'POST':
-#            p = NewPostForm(request.POST, request.FILES)
-#            print(p)
-#            try:
-#                if p.is_valid:
-#                    print("valid")
-#                    obj = p.save(commit=False)
-#                    obj.user_name = request.user
-#                    obj.save()
-#                    print("created!")
-#                    return HttpResponseRedirect('feed')
-#            except ValueError:
-#               return HttpResponseRedirect('createPost')        
-#
-#
-

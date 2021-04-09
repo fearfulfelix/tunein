@@ -11,22 +11,26 @@
 {% block content %}
     <h1>Hello!</h1>
     <div id="loginFields">
-    <form action = "{% url 'processLogin' %}" method="post">
+    <form action = "{% url 'login' %}" method="post">
         {% csrf_token %}
         {{ LoginForm.as_p }}
         
-        <input type="submit" value="Login">
+        <input type="submit" name='formType' value="Login">
     </form>
 </div>
 <div id="registrationFields">
-    <form action="{% url 'register' %}" method="post">
+    <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
         {{ RegistrationForm.as_p }}
-        <input type="submit" value="Create New Account">
+        <input type="submit" name='formType' value="Create New Account">
     </form> 
-    
 </div>
+
 <input type="button" onclick="toggleVisiblilty()" value="New User?" id="loginToggle">
+<br> 
+{%if message%}
+    {{message}}
+{%endif%}
 {% endblock %}
 </body>
 </html>
