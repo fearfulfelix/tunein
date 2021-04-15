@@ -9,8 +9,8 @@ function likePost(id){
             if (data.message) {
                 createPopup('post liked');
                 var likes = numToStr(data.likes);
-
-                var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
+                console.log('success :)');
+                var $row = $('#'+id+' > .post_interactables > div:eq(0)');
                 $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘"+likes+"</span><span class='btn-text'>Liked</span></button>");
             }
         }
@@ -29,7 +29,7 @@ function unlikePost(id){
                 createPopup('post liked');
                 var likes = numToStr(data.likes);
 
-                var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
+                var $row = $('#'+id+' >  .post_interactables  > div:eq(0)');
                 $row.html("<button class='btn' onclick='likePost("+id+")'id='likeButton'><span class='btn-icon'>❤"+likes+"</span><span class='btn-text'>Like</span></button>");
             }
         }
@@ -44,7 +44,7 @@ function isLiked(id){
         },
         dataType: 'json',
         success: function (data) {
-            var $row = $('#'+id+' > div:eq(3) > div:eq(0)');
+            var $row = $('#'+id+' >  .post_interactables  > div:eq(0)');
             var likes = numToStr(data.likes);
             if (data.liked) {
                 $row.html("<button class='btn' onclick='unlikePost("+id+")' id='likeButton'><span class='btn-icon'>💘"+likes+"</span><span class='btn-text'>Liked</span></button>");
