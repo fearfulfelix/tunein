@@ -56,6 +56,10 @@ function isLiked(id){
 }
 
 function showCommentPopup(id){
+    if($("#sc_"+id).length){
+        //dont open, comment box is already open
+        $("#sc_"+id).remove();
+    }
     if($("#cc_"+id).length){
         //closes comment area
         $("#cc_"+id).remove();
@@ -161,31 +165,35 @@ function deleteComment(p,id){
 
 }
 function prepForSharing(id){
+    if($("#cc_"+id).length){
+        //closes comment area
+        $("#cc_"+id).remove();
+    }
     if($("#sc_"+id).length){
         //dont open, comment box is already open
+        $("#sc_"+id).remove();
     }
     else{
         var container  = document.createElement('DIV');
-        container.classList.add('comment-Container');//its not for comments but it still works
         $(container).attr('id', 'sc_'+id);
-        var close = document.createElement('button');
-        close.innerHTML='X';
-        close.onclick = function(){$(container).remove();}
         var title = document.createElement('h3');
         title.innerHTML='Share to friends:';
-        $(container).append(close);
         $(container).append(title);
 
         var commentField = document.createElement('TEXTAREA');
         $(commentField).attr('id', 'sf_'+id);
+        commentField.placeholder = 'Write a message...';
         var formbutton = document.createElement('button');
         formbutton.innerText = 'Post';
+        formbutton.classList.add('postButton');
+
         formbutton.onclick = function(){shareToFriends(id);};
+        linebreak = document.createElement("br");
         
         $(container).append(commentField);
+        $(container).append(linebreak);
         $(container).append(formbutton);
-        $("#"+id).prepend(container);
-        window.location.hash = "#sc_"+id;
+        $("#"+id).append(container);
     }
 }
 function shareToFriends(id){
