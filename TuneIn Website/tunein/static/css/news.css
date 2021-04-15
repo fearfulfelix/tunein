@@ -131,6 +131,7 @@ audio {
 }
 
 .comments {
+text-align: left;
 position: relative;
 transition-duration: 0.4s;
 max-width: 300px;
@@ -164,4 +165,43 @@ text-decoration: none;
 display: inline-block;
 font-size: 16px;
 
+}
+textarea {
+    border: 0 none white;
+    overflow: auto;
+    padding: 0;
+    outline: none;
+    background-color: #D0D0D0;
+    resize: none;
+    width: 308px;
+    height: 125px;
+}
+
+.postButton{
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  background-color: #1A1B2F;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.post_text {
+position: relative;
+  display: inline-block;
+  padding: 10px;
+  background-color: #1A1B2F;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 10px;
+  margin-top: 15px;
 }

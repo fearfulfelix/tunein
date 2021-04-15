@@ -79,7 +79,7 @@ function showCommentPopup(id){
                     data.comments.forEach(element => {
                         var comment = document.createElement('DIV');
                         comment.classList.add('comments');
-                        comment.classList.add('comments:hover');
+
                         var username = document.createElement('b');
                         username.innerText = element.user +': ';
                         var message = document.createElement('span');
@@ -104,14 +104,18 @@ function showCommentPopup(id){
        
         
         $(container).append(comments);
-        
+        linebreak = document.createElement("br");
         //you can't serialize a form so we're just gonna make one the hard way
         var commentField = document.createElement('TEXTAREA');
-        $(commentField).attr('id', 'cf_'+id);
+        $(commentField).attr('id', 'cf_'+id,);
+        commentField.placeholder = 'Write a comment...';
+
         var formbutton = document.createElement('button');
         formbutton.innerText = 'Post';
         formbutton.onclick = function(){postComment(id);};
+        formbutton.classList.add('postButton');
         $(container).append(commentField);
+        $(container).append(linebreak);
         $(container).append(formbutton);
         $("#"+id).append(container);
     }
