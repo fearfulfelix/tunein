@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
 from .validators import validate_file_extension
+import os
 
 
 # Create your models here.
@@ -22,6 +23,14 @@ class Post(models.Model):
 
     def get_date(self):
         return self.date_posted
+    
+    def extension(self):
+        video = ['.mp4', '.mov', '.m4v', '.avi']
+        audio = ['.wav', '.mp3', '.flac', '.mkv', '.aac'] 
+        name, extension = os.path.splitext(self.choose_file.name)
+        if extension in video: return "video"
+        elif extension in audio: return "audio"
+        return None
 
 class SharedPost(models.Model):
     originPost = models.ForeignKey(Post, on_delete=models.CASCADE,null=True)

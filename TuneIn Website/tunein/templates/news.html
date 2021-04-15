@@ -42,16 +42,23 @@ things that need to be changed/ added:
         </div>
 
         <div class="post_content">
-            <img src="{{post.originPost.pic}}">
-            {% if post.choose_file %}
-                <video id = "post_vid" width = "850" height = "500" controls>
-                    <source src = "{{post.choose_file}}" type ="video/mp4" />
-                    Your browser does not support the <video> element.
-                </video>                  
-                <audio id = "post_audio" src = "{{post.choose_file}}" controls>
-                    Your browser does not support the <audio> element.   
-                </audio>                                                                  
-                {% endif %}
+            {% if post.originPost.pic %}
+                        <img class="" src="{{post.originPost.pic.url}}">
+                    {% endif %}
+                    {% if post.originPost.choose_file %}
+                    
+                    {%if post.originPost.extension == "video"%}
+                    <video id = "post_vid" width = "850" height = "500" controls>
+                        <source src = "{{post.originPost.choose_file.url}}" type ="video/mp4" />
+                        Your browser does not support the video element.
+                    </video>                
+                    {%elif post.originPost.extension == "audio"%}   
+                        <audio id = "post_audio" controls>
+                            <source src = "{{post.originPost.choose_file.url}}" >
+                            Your browser does not support the audio element.   
+                        </audio>
+                    {%endif%}                                                                
+                {%endif%}
 
         </div>
         <div class="post_text">
@@ -98,16 +105,23 @@ things that need to be changed/ added:
         </div>
 
         <div class="post_content">
-            <img src="{{post.pic}}">
-            {% if post.choose_file %}
-                <video id = "post_vid" width = "850" height = "500" controls>
-                    <source src = "{{post.choose_file}}" type ="video/mp4" />
-                    Your browser does not support the <video> element.
-                </video>                  
-                <audio id = "post_audio" src = "{{post.choose_file}}" controls>
-                    Your browser does not support the <audio> element.   
-                </audio>                                                                  
-                {% endif %}
+             
+            {% if post.pic %}
+            <img class="" src="{{post.pic.url}}">
+        {% endif %}
+        {% if post.choose_file %}
+        {%if post.extension == "video"%}
+        <video id = "post_vid" width = "850" height = "500" controls>
+            <source src = "{{post.choose_file.url}}" type ="video/mp4" />
+            Your browser does not support the video element.
+        </video>                
+        {%elif post.extension == "audio" %}   
+            <audio id = "post_audio" controls>
+                <source src = "{{post.choose_file.url}}" >
+                Your browser does not support the audio element.   
+            </audio>
+        {%endif%}                                                                
+    {%endif%}
 
         </div>
         <div class="post_text">

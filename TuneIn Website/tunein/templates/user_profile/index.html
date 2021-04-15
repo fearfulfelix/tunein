@@ -87,8 +87,22 @@
         </div>
 
         <div class="post_content">
-            <img src="{{post.originPost.pic.url}}">
-
+            {% if post.originPost.pic %}
+                        <img class="" src="{{post.originPost.pic.url}}">
+                    {% endif %}
+                    {% if post.originPost.choose_file %}
+                    {%if post.originPost.extension == "video"%}
+                    <video id = "post_vid" width = "850" height = "500" controls>
+                        <source src = "{{post.originPost.choose_file.url}}" type ="video/mp4" />
+                        Your browser does not support the video element.
+                    </video>                
+                    {%elif post.originPost.extension == "audio"%}   
+                        <audio id = "post_audio" controls>
+                            <source src = "{{post.originPost.choose_file.url}}" >
+                            Your browser does not support the audio element.   
+                        </audio>
+                    {%endif%}                                                                
+                {%endif%}
 
         </div>
         <div class="post_text">
@@ -133,11 +147,27 @@
                     <a class="post_username" href="">{{user.username}}</a>
                     <span class="date">{{post.date_posted}}</span>
                 </div>
-                {% if post.pic %}
                 <div class="post_content">
-                    <img class="" src="{{post.pic.url}}">
-                </div>
+                    
+                    {% if post.pic %}
+                        <img class="" src="{{post.pic.url}}">
+                    {% endif %}
+                    {% if post.choose_file %}
+                    {%if post.extension == "video"%}
+                    <video id = "post_vid" width = "850" height = "500" controls>
+                        <source src = "{{post.choose_file.url}}" type ="video/mp4" />
+                        Your browser does not support the video element.
+                    </video>                
+                    {%elif post.extension == "audio" %}   
+                        <audio id = "post_audio" controls>
+                            <source src = "{{post.choose_file.url}}" >
+                            Your browser does not support the audio element.   
+                        </audio>
+                    {%endif%}                                                                
                 {%endif%}
+
+                </div>
+                
                 <div class="post_text">
                     <p>{{post.description}}</p>
                 </div>
