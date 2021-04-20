@@ -87,26 +87,41 @@ def feed(request):
 def settings(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            if request.POST['formType'] == 'Update Bio':
-                form = bioForm(request.POST)
-                if(form.is_valid()):
-                    newBio = form.cleaned_data['bio']
-                    request.user.profile.bio = newBio
+            p = updateProfileForm(request.POST, request.FILES)
+            if p.is_valid():
+                try:
+                    cleanProfile = p.cleaned_data
+                    first = cleanProfile['first_name']
+                    last = cleanProfile['last_name']
+                    bio = cleanProfile['bio']
+
+                    if(cleanProfile['profilePicture']):
+                        img = Image.open(cleanProfile['profilePicture'])
+                        #image processing stuff goes here :)
+                        img_width, img_height = img.size
+                        c_img = img.crop(((img_width - min(img.size)) // 2, (img_height - min(img.size)) // 2, (img_width + min(img.size)) // 2, (img_height + min(img.size)) // 2))
+                        c_img = c_img.resize((250,250))
+                        thumb_io = BytesIO()
+                        c_img.save(thumb_io, format='PNG')
+                        thumb_file = File(thumb_io, name=cleanProfile['profilePicture'].name)
+                        #image processing is done, model gets saved
+                        request.user.profile.photo = thumb_file
+
+                    request.user.profile.first_name = first
+                    request.user.profile.last_name = last
+                    request.user.profile.bio = bio
                     request.user.profile.save()
+                except ValueError:
+                        errmsg ="something went wrong, please try again."
+                        profile = updateProfileForm()
+                        return render(request,'settings.html',{'profileForm':profile,'message':errmsg}) 
             else:
-                form = nameForm(request.POST)
-                if(form.is_valid()):
-                    newFirst = form.cleaned_data['first_name']
-                    newLast = form.cleaned_data['last_name']
-                    if newFirst != "" and newLast != "":
-                        request.user.profile.first_name = newFirst
-                        request.user.profile.last_name = newLast
-                        request.user.profile.save()
+                print(p.errors)
         else:
-            name= nameForm()
-            bio = bioForm()
-            return render(request,'settings.html',{"nameForm":name, "bioForm":bio})
-        return HttpResponseRedirect('feed')
+            profile = updateProfileForm(initial={'first_name': request.user.profile.first_name, 'last_name': request.user.profile.last_name,
+            'bio': request.user.profile.bio,'profilePicture': request.user.profile.photo})
+            return render(request,'settings.html',{"Form":profile})
+        return HttpResponseRedirect('user_profile')
     else:
         return HttpResponseRedirect('/')
 

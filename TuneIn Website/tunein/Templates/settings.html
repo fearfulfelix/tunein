@@ -53,7 +53,17 @@
     background-color: #c57600;
   }
 
-    
+.c_icon{
+    margin: auto;
+    height: 200px;
+    width: 200px;
+}
+.icon{
+    width:inherit;
+    align-content: center;
+    border-radius: 100%;
+    position:relative;
+}
 </style>
 <!-- HTML Layout for posts on the news page -->
 <div class="posts">
@@ -61,19 +71,25 @@
     <div class="post">
         
         
-        <form action="{% url 'settings' %}", method="post">
+        <form action="{% url 'settings' %}", method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
-            {{nameForm.as_p}}
-            <input type="submit"name='formType' value="Update Name">
+            {%for field in Form%}
+            <li>
+                {{ field.errors }}
+                {{ field.label_tag }}<br />
+                {{field.type}}
+                {% if field.label == 'Profile picture' %}
+                <div class="c_icon"><img class="icon"src="{{ field.value.url }}"></div><br>
+                {% endif %}
+                {% for q in field %}
+                    {{ q }}<br />
+                {% endfor %}<br />
+            </li>
+            {%endfor%}
+            <input type="submit"name='formType' value="Submit">
         </form>
         <!--Name  <pre>Alex O'Hare</pre> <a href><span class="edit">Edit</span></a>-->
-        
-        <hr>
-        <form action="{% url 'settings' %}", method="post">
-            {% csrf_token %}
-            {{bioForm.as_p}}
-            <input type="submit" name='formType'value="Update Bio">
-        </form>
+
         <!--Username <pre>TuneIn.com/HeroOfTime</pre> <a href><span class="edit">Edit</span></a>-->
         
         <!--<div class="post_text">
